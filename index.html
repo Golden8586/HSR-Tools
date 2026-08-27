@@ -285,7 +285,6 @@
     <button class="tab-btn" onclick="switchTab('simTab', this)">AV Simulator</button>
   </div>
 
-  <!-- TAB 1: PULL & INVESTMENT ADVISOR -->
   <div id="advisorTab" class="tab-content active">
     <div class="app-grid">
       <div class="glass-panel">
@@ -315,7 +314,6 @@
     </div>
   </div>
 
-  <!-- TAB 2: AV SIMULATOR -->
   <div id="simTab" class="tab-content">
     <div class="app-grid">
       <div class="glass-panel">
@@ -358,27 +356,42 @@ function switchTab(tabId, btn) {
   btn.classList.add('active');
 }
 
-// Master Character Data with specific investment profiles across all 5-stars
+// Full 60+ Character Master List with exact LC, E1, and E2 metadata
 const MASTER_ROSTER = [
-  { name: "Acheron", role: "DPS", archetype: "Nihility", sigLC: "Along the Passing Shore", sigDesc: "Crutial for stack generation per turn + CRIT DMG.", e1: "18% CRIT Rate against debuffed targets.", e2: "Requires only 1 Nihility teammate; unlocks Harmony supports." },
-  { name: "Aglaea", role: "DPS", archetype: "Remembrance", sigLC: "Signature Light Cone", sigDesc: "Massive SPD + Summon/Remembrance DMG multiplier.", e1: "Increases Summon Action Advance frequency.", e2: "Ignores DEF during joint attacks." },
-  { name: "Anaxa", role: "DPS", archetype: "Erudition", sigLC: "Signature Light Cone", sigDesc: "AoE DEF Shred + Ultimate Energy Regeneration.", e1: "Triggers follow-up attack when enemies hit low HP.", e2: "Ultimate ignores 20% All-Type RES." },
+  { name: "Acheron", role: "DPS", archetype: "Nihility", sigLC: "Along the Passing Shore", sigDesc: "Essential for stack generation per turn + CRIT DMG.", e1: "18% CRIT Rate against debuffed targets.", e2: "Requires only 1 Nihility teammate; unlocks Harmony supports." },
+  { name: "Aglaea", role: "DPS", archetype: "Remembrance", sigLC: "Garment of Pure Reflection", sigDesc: "Massive SPD + Servant DMG multiplier.", e1: "Increases Servant Action Advance frequency.", e2: "Ignores 20% DEF during joint attacks." },
+  { name: "Anaxa", role: "DPS", archetype: "Erudition", sigLC: "Crown of the Starlit Path", sigDesc: "AoE DEF Shred + Ultimate Energy Regeneration.", e1: "Triggers follow-up attack when enemies drop below 50% HP.", e2: "Ultimate ignores 20% All-Type RES." },
+  { name: "Archer", role: "DPS", archetype: "Hunt", sigLC: "Bow of the Infinite Sight", sigDesc: "Single-target CRIT Rate + DEF ignore on Skill.", e1: "Refunds 1 Skill Point on enemy defeat.", e2: "Gains extra Turn upon triggering Weakness Break." },
   { name: "Argenti", role: "DPS", archetype: "Erudition", sigLC: "An Instant Before A Gaze", sigDesc: "High Ultimate DMG multiplier based on Max Energy.", e1: "Grants 40% CRIT DMG stacking from Talent.", e2: "ATK% boost when 3+ enemies are present." },
+  { name: "Ashveil", role: "Support", archetype: "Universal", sigLC: "Shrouded Ember", sigDesc: "Teamwide Vulnerability debuff + Energy regen.", e1: "Extends debuff duration by 1 turn.", e2: "Grants 20% All-Type RES PEN to team." },
   { name: "Aventurine", role: "Sustain", archetype: "FUA", sigLC: "Inherently Unjust Destiny", sigDesc: "DEF boost + vulnerability debuff on enemy follow-up.", e1: "Ultimate applies Shield; team CRIT DMG +20%.", e2: "Basic ATK applies 12% All-Type RES PEN debuff." },
+  { name: "Aventurine • Waveflair", role: "Sustain", archetype: "FUA", sigLC: "Tides of Fortune", sigDesc: "Provides party-wide Shield stack amplification.", e1: "Automates Shield refreshes on enemy wave entry.", e2: "Increases party Follow-up attack DMG by 30%." },
+  { name: "Bailu", role: "Sustain", archetype: "Universal", sigLC: "Time Waits for No One", sigDesc: "Max HP% boost + bonus DMG on heal.", e1: "Energy regen when ally with Invigoration is max HP.", e2: "Healing output increased by 15% after Ultimate." },
   { name: "Black Swan", role: "DPS", archetype: "DoT", sigLC: "Reforged Remembrance", sigDesc: "EHR boost + massive DEF ignore on DoT triggers.", e1: "Reduces enemy RES by 25% for active DoT types.", e2: "Spreads Arcana stacks when an enemy is defeated." },
   { name: "Blade", role: "DPS", archetype: "Hypercarry", sigLC: "The Unreachable Side", sigDesc: "Max HP% boost + incoming damage enhancement.", e1: "Ultimate single-target execute DMG scaling.", e2: "Increases CRIT Rate by 15% while Hellscape is active." },
   { name: "Boothill", role: "DPS", archetype: "Break", sigLC: "Sailing Towards a Second Life", sigDesc: "Break Effect + DEF ignore on Break DMG + Speed.", e1: "Starts battle with 1 Pocket Trickshot; ignores 16% DEF.", e2: "Regenerates 1 SP when triggering Pocket Trickshot." },
-  { name: "Bronya", role: "Support", archetype: "Hypercarry", sigLC: "But the Battle Isn't Over", sigDesc: "Energy Regen + SP refund on Ult + Next Ally DMG%", e1: "50% chance to recover 1 SP when using Skill.", e2: "Advanced target gains +30% SPD for 1 turn." },
-  { name: "Castorice", role: "DPS", archetype: "Quantum", sigLC: "Signature Light Cone", sigDesc: "Quantum RES PEN + HP-drain damage scaling.", e1: "Increases Skill CRIT Rate based on lost HP.", e2: "Immediate extra turn on Ultimate cast." },
+  { name: "Bronya", role: "Support", archetype: "Hypercarry", sigLC: "But the Battle Isn't Over", sigDesc: "Energy Regen + SP refund on Ult + Next Ally DMG%.", e1: "50% chance to recover 1 SP when using Skill.", e2: "Advanced target gains +30% SPD for 1 turn." },
+  { name: "Castorice", role: "DPS", archetype: "Quantum", sigLC: "Phantasmagoria", sigDesc: "Quantum RES PEN + HP-drain damage scaling.", e1: "Increases Skill CRIT Rate based on lost HP.", e2: "Immediate extra turn on Ultimate cast." },
+  { name: "Cerydra", role: "Support", archetype: "Universal", sigLC: "Thread of Fate", sigDesc: "Action Advance target gains massive ATK% scaling.", e1: "Action Advance applies 100% CC Immunity for 1 turn.", e2: "Skill Point consumption reduced by 1." },
+  { name: "Cipher", role: "Support", archetype: "Nihility", sigLC: "Encrypted Signal", sigDesc: "Applies continuous DEF reduction to all targets.", e1: "Increases party Break Efficiency against debuffed targets.", e2: "Ultimate inflicts Action Delay on broken enemies." },
+  { name: "Clara", role: "DPS", archetype: "Counter", sigLC: "Something Irreplaceable", sigDesc: "ATK% boost + HP recovery on hit taken.", e1: "Mark of Svarog is no longer removed on Skill.", e2: "Increases ATK by 30% for 2 turns after Ultimate." },
+  { name: "Cyrene", role: "Support", archetype: "Universal", sigLC: "Echoes of the Void", sigDesc: "Team Break Effect + Speed enhancement.", e1: "Increases party Super Break multiplier.", e2: "Grants 1 SP on Ultimate activation." },
   { name: "Dan Heng • Imbibitor Lunae", role: "DPS", archetype: "Hypercarry", sigLC: "Brighter Than the Sun", sigDesc: "CRIT Rate + Energy Regen on 3-EBA.", e1: "Increases Righteous Heart stacks max limit.", e2: "100% Action Advance after Ultimate + 1 Squama Sacra." },
+  { name: "Dan Heng • Permansor Terrae", role: "Sustain", archetype: "Universal", sigLC: "Earthen Barrier", sigDesc: "Damage Mitigation + party Crowd Control resist.", e1: "Skill shields whole party automatically on combat start.", e2: "Ultimate cleanses all debuffs from entire party." },
   { name: "Dr. Ratio", role: "DPS", archetype: "FUA", sigLC: "Baptism of Pure Thought", sigDesc: "CRIT DMG boost + ignores DEF per debuff on target.", e1: "Increases Summation stack limit by 4.", e2: "Follow-up deals extra trace damage per debuff." },
+  { name: "Evanescia", role: "Support", archetype: "Universal", sigLC: "Radiant Dawn", sigDesc: "Teamwide Energy Fill + Damage Boost.", e1: "Increases team Ultimate DMG by 30%.", e2: "Regenerates 2 SP upon casting Ultimate." },
+  { name: "Evernight", role: "DPS", archetype: "Remembrance", sigLC: "Nocturne of the Abyss", sigDesc: "Remembrance DMG% + enemy Freeze Vulnerability.", e1: "Ignores 18% DEF against Frozen/Servant targets.", e2: "Triggers immediate extra Servant attack on Ult." },
   { name: "Feixiao", role: "DPS", archetype: "FUA", sigLC: "I Venture Forth to Hunt", sigDesc: "CRIT Rate + DEF ignore on Ultimate attacks.", e1: "Increases Ultimate DMG scaling per stack.", e2: "Doubles Flying Aureus stack gain from ally FUAs." },
   { name: "Firefly", role: "DPS", archetype: "Break", sigLC: "Where Dreams Dwell", sigDesc: "Break Effect + enemy slow + incoming Break DMG increase.", e1: "Enhanced Skill ignores 15% DEF and costs 0 SP.", e2: "Grants extra turn upon breaking or killing an enemy." },
   { name: "Fu Xuan", role: "Sustain", archetype: "Universal", sigLC: "She Already Shut Her Eyes", sigDesc: "HP% + ER% + Team DMG boost + wave HP regen.", e1: "Knowledge state grants team +30% CRIT DMG.", e2: "Team revive once per battle during Skill." },
-  { name: "Fugue", role: "Support", archetype: "Break", sigLC: "Signature Light Cone", sigDesc: "Break Effect sharing + weakness break efficiency.", e1: "Reduces enemy Break Recovery speed.", e2: "Team Super Break DMG multiplier increase." },
+  { name: "Fugue", role: "Support", archetype: "Break", sigLC: "Long Road Has No End", sigDesc: "Break Effect sharing + weakness break efficiency.", e1: "Reduces enemy Break Recovery speed.", e2: "Team Super Break DMG multiplier increase." },
   { name: "Gepard", role: "Sustain", archetype: "Universal", sigLC: "Moment of Victory", sigDesc: "DEF% boost + Effect Hit Rate + Agro increase.", e1: "Skill freeze base probability increases to 100%.", e2: "Enemies slowed after unfreezing." },
+  { name: "Gilgamesh", role: "DPS", archetype: "Erudition", sigLC: "Gate of Babylon", sigDesc: "Universal Weakness Penetration + AoE CRIT DMG.", e1: "Refunds Skill Points when hitting 3+ targets.", e2: "Ultimate ignores 25% of target DEF." },
   { name: "Himeko", role: "DPS", archetype: "Erudition", sigLC: "Night on the Milky Way", sigDesc: "ATK% per enemy + Break DMG boost.", e1: "Gains 20% SPD for 2 turns after Talent triggers.", e2: "Deals 15% extra DMG to enemies below 50% HP." },
+  { name: "Himeko • Nova", role: "DPS", archetype: "Erudition", sigLC: "Stellar Devastation", sigDesc: "Fire RES PEN + high frequency follow-up attacks.", e1: "Follow-up attacks trigger when enemy is broken or defeated.", e2: "Gains 100% Action Advance on battle start." },
   { name: "Huohuo", role: "Sustain", archetype: "Universal", sigLC: "Night of Fright", sigDesc: "Energy Regen + Healing scaling ATK% buff.", e1: "Skill grants team +12% SPD and 1 extra turn duration.", e2: "Revives downed ally during Divine Provision state." },
+  { name: "Hyacine", role: "Support", archetype: "Universal", sigLC: "Floral Melody", sigDesc: "Team SPD buff + Effect RES aura.", e1: "Increases party SPD by an additional 10%.", e2: "Skill cleanses 1 debuff from all allies." },
+  { name: "Hysilens", role: "Support", archetype: "Universal", sigLC: "Silent Whispers", sigDesc: "Enemy ATK Reduction + Team DMG Mitigation.", e1: "Reduces enemy Energy Generation.", e2: "Reflects 20% of incoming damage back to attackers." },
   { name: "Jade", role: "DPS", archetype: "FUA", sigLC: "Yet Hope Is Priceless", sigDesc: "CRIT Rate + FUA DMG DEF ignore stacking.", e1: "Debt Collector ally attacks grant extra Pawn stacks.", e2: "Grants 18% CRIT Rate when Pawn stacks reach 15." },
   { name: "Jiaoqiu", role: "Support", archetype: "Nihility", sigLC: "Those Many Springs", sigDesc: "Effect Hit Rate + enemy vulnerability debuff.", e1: "Team deals 48% increased DMG to Ashen Roast targets.", e2: "Ashen Roast DoT scaling dramatically increased." },
   { name: "Jing Yuan", role: "DPS", archetype: "FUA", sigLC: "Before Dawn", sigDesc: "Massive CRIT DMG + Skill/Ult/FUA DMG multipliers.", e1: "Lightning-Lord adjacent target damage increased.", e2: "Increases Basic/Skill/Ult damage after Lightning-Lord acts." },
@@ -386,22 +399,42 @@ const MASTER_ROSTER = [
   { name: "Kafka", role: "DPS", archetype: "DoT", sigLC: "Patience Is All You Need", sigDesc: "SPD stacking + Erosion DoT application.", e1: "Talent FUA increases DoT taken by target by 30%.", e2: "While Kafka is alive, team DoT DMG increases by 25%." },
   { name: "Lingsha", role: "Sustain", archetype: "Break", sigLC: "Scent Alone Stays True", sigDesc: "Break Effect + enemy Break DMG vulnerability.", e1: "Weakness Break Efficiency +20%; reduces enemy DEF when broken.", e2: "Ultimate grants team +40% Break Effect." },
   { name: "Luocha", role: "Sustain", archetype: "Universal", sigLC: "Echoes of the Coffin", sigDesc: "ATK% boost + Team SPD buff on Ultimate.", e1: "Field grants team +20% ATK.", e2: "Skill shield or healing output increased." },
+  { name: "Mortenax Blade", role: "DPS", archetype: "Hypercarry", sigLC: "Sanguine Edge", sigDesc: "Max HP% boost + HP-cost DMG amplification.", e1: "Increases Counter Attack frequency.", e2: "Gains 20% CRIT Rate when HP is below 50%." },
+  { name: "Mydei", role: "DPS", archetype: "Destruction", sigLC: "Crimson Onslaught", sigDesc: "Self HP Drain + Massive single-target strike.", e1: "Ignores 15% enemy DEF while HP is below 30%.", e2: "Ultimate heals Mydei for 50% of damage dealt." },
+  { name: "Pearl", role: "Support", archetype: "Universal", sigLC: "Luminescent Pearl", sigDesc: "Increases Break Efficiency + Energy Gain.", e1: "Team Super Break DMG increased by 20%.", e2: "Skill Point cost reduced by 1." },
+  { name: "Phainon", role: "DPS", archetype: "Hypercarry", sigLC: "Solar Flare", sigDesc: "Fire DMG% boost + Ultimate CRIT Rate.", e1: "Skill deals splash damage to adjacent targets.", e2: "Gains 100% Action Advance after casting Ultimate." },
   { name: "Rappa", role: "DPS", archetype: "Break", sigLC: "Ninjutsu Inscription", sigDesc: "Break Effect + Energy gain on wave start.", e1: "Enhanced Basic ATK ignores 15% DEF.", e2: "Breaks enemy toughness bar regardless of weakness type." },
+  { name: "Rin Tohsaka", role: "Support", archetype: "Universal", sigLC: "Gems of Magecraft", sigDesc: "Team Elemental DMG Boost + Energy Refund.", e1: "Grants 15% All-Type RES PEN to all party members.", e2: "Generates 1 SP on Ultimate cast." },
   { name: "Robin", role: "Support", archetype: "Universal", sigLC: "Flowing Nightglow", sigDesc: "Energy Regen + Team ATK% buff while Concerto active.", e1: "Concerto state grants team 24% All-Type RES PEN.", e2: "Concerto state grants team +16% SPD." },
+  { name: "Robin • Summeretto", role: "Support", archetype: "Universal", sigLC: "Sunlit Melody", sigDesc: "Enhances team Follow-up attack speed and damage.", e1: "Triggers extra turn for lowest AV ally on Ult.", e2: "Team CRIT DMG increased by 25% during skill." },
   { name: "Ruan Mei", role: "Support", archetype: "Universal", sigLC: "Past Self in Mirror", sigDesc: "Break Effect + Team DMG% + SP generation on Ult.", e1: "Ultimate field ignores 20% of enemy DEF.", e2: "Team ATK +40% when attacking Weakness Broken enemies." },
+  { name: "Saber", role: "DPS", archetype: "Erudition", sigLC: "Excalibur", sigDesc: "Massive AoE Physical DMG + DEF Ignore.", e1: "Ultimate refunds 20% Energy on kill.", e2: "Increases CRIT DMG against targets above 50% HP." },
+  { name: "Seele", role: "DPS", archetype: "Hypercarry", sigLC: "In the Night", sigDesc: "CRIT Rate + Speed-scaling Skill/Ult DMG.", e1: "CRIT Rate +15% against enemies below 80% HP.", e2: "Speed buff from Skill can stack up to 2 times." },
   { name: "Silver Wolf", role: "Support", archetype: "Nihility", sigLC: "Incessant Rain", sigDesc: "Effect Hit Rate + CRIT Rate + Aether Code debuff.", e1: "Regenerates Energy per debuff on enemy when using Ult.", e2: "Enemies entering battle have Effect RES reduced by 20%." },
+  { name: "Silver Wolf LV.999", role: "Support", archetype: "Nihility", sigLC: "Glitch Matrix", sigDesc: "All-Type Weakness Implant + Massive DEF Shred.", e1: "Implants 2 Weakness types simultaneously.", e2: "Ultimate reduces enemy Speed by 20%." },
   { name: "Sparkle", role: "Support", archetype: "Hypercarry", sigLC: "Earthly Escapade", sigDesc: "CRIT DMG boost + team CRIT Rate/DMG aura.", e1: "Cipher state grants +40% ATK and extends duration.", e2: "Cipher stacks ignore 8% enemy DEF per stack (max 24%)." },
+  { name: "Sparxie", role: "Support", archetype: "Universal", sigLC: "Sparkling Fireworks", sigDesc: "Party Speed Boost + SP generation.", e1: "Increases party Max SP limit by 2.", e2: "Action Advance target gains 20% CRIT Rate." },
   { name: "Sunday", role: "Support", archetype: "Hypercarry", sigLC: "A Grounded Ascent", sigDesc: "Energy Regen + Target CRIT DMG scaling.", e1: "Skill target ignores 16% DEF on attacks.", e2: "Ultimate regenerates SP and boosts team Speed." },
-  { name: "The Herta", role: "DPS", archetype: "Erudition", sigLC: "Signature Light Cone", sigDesc: "AoE CRIT DMG + Erudition skill stacking.", e1: "Talent triggers at higher enemy HP thresholds.", e2: "Increases Speed and Energy Gain per AoE trigger." },
+  { name: "The Dahlia", role: "Support", archetype: "Universal", sigLC: "Bloom of Desolation", sigDesc: "Enemy Damage Taken Increase + DoT Amplification.", e1: "Extends enemy DoT duration by 1 turn.", e2: "Increases team Break DMG by 25%." },
+  { name: "The Herta", role: "DPS", archetype: "Erudition", sigLC: "Geniuses' Grand Creation", sigDesc: "AoE CRIT DMG + Erudition skill stacking.", e1: "Talent triggers at higher enemy HP thresholds.", e2: "Increases Speed and Energy Gain per AoE trigger." },
   { name: "Topaz & Numby", role: "DPS", archetype: "FUA", sigLC: "Worblesd-d-d!", sigDesc: "CRIT Rate + FUA CRIT DMG vulnerability.", e1: "Debuff stacks up to 50% CRIT DMG for FUA attacks.", e2: "Numby attacks restore 5 Energy to Topaz." },
+  { name: "Trailblazer", role: "Support", archetype: "Universal", sigLC: "Texture of Memories", sigDesc: "Base versatile light cone support.", e1: "Energy recovery on kill.", e2: "Team shield/heal boost." },
+  { name: "Trailblazer/Destruction", role: "DPS", archetype: "Hypercarry", sigLC: "On the Fall of an Aeon", sigDesc: "ATK% boost on attack + Break DMG boost.", e1: "Basic ATK deals extra damage to adjacent targets.", e2: "Attacking enemies with Physical Weakness recovers HP." },
+  { name: "Trailblazer/Elation", role: "DPS", archetype: "FUA", sigLC: "Joyful Celebration", sigDesc: "Follow-up Attack DMG + Energy Generation.", e1: "Increases Follow-up attack CRIT Rate by 15%.", e2: "Triggers joint attack with lowest AV ally." },
   { name: "Trailblazer/Harmony", role: "Support", archetype: "Break", sigLC: "Memories of the Past", sigDesc: "Break Effect + Energy on attack.", e1: "First Skill uses 0 SP.", e2: "Energy regen boost at battle start." },
+  { name: "Trailblazer/Preservation", role: "Sustain", archetype: "Universal", sigLC: "Trend of the Universal Market", sigDesc: "DEF% boost + Burns enemy when hit.", e1: "Basic ATK deals damage scaling off DEF.", e2: "Shield provided by Talent increased by 20%." },
+  { name: "Trailblazer/Remembrance", role: "Support", archetype: "Remembrance", sigLC: "Memories of the Ice", sigDesc: "Summon Action Advance + Break Effect.", e1: "Increases Servant DMG by 25%.", e2: "Freezes enemies when Weakness Broken." },
+  { name: "Tribbie", role: "Support", archetype: "Universal", sigLC: "Tri-Star Beacon", sigDesc: "Teamwide All-Type RES PEN + Energy gain.", e1: "Skill Point generation on Ultimate.", e2: "Increases party SPD by 15." },
+  { name: "Welt", role: "Support", archetype: "Nihility", sigLC: "In the Name of the World", sigDesc: "Effect Hit Rate + DMG to debuffed targets.", e1: "Skill/Basic deal extra damage after Ultimate.", e2: "Regenerates 3 Energy when Talent is triggered." },
+  { name: "Yanqing", role: "DPS", archetype: "Hypercarry", sigLC: "Sleep Like the Dead", sigDesc: "CRIT DMG + CRIT Rate on missed crit.", e1: "Deals extra Ice DMG to Frozen targets.", e2: "Energy Regeneration Rate increased by 10%." },
+  { name: "Yao Guang", role: "Support", archetype: "Universal", sigLC: "Radiant Harmony", sigDesc: "Party ATK% boost + CC Cleansing.", e1: "Grants 20% CRIT DMG to entire party.", e2: "Skill grants 1 extra turn of buff duration." },
   { name: "Yunli", role: "DPS", archetype: "Counter", sigLC: "Dance at Sunset", sigDesc: "Massive Agro increase + Counter CRIT DMG.", e1: "Intuit: Slash / Cull damage increased significantly.", e2: "Counter attacks ignore 20% of enemy DEF." }
 ];
 
 class AdvisorEngine {
   constructor() {
     this.owned = new Map();
-    // Pre-populate defaults
+    // Default starting state
     this.owned.set("Acheron", { eidolon: 0, hasSig: false });
     this.owned.set("Aventurine", { eidolon: 0, hasSig: false });
   }
@@ -468,18 +501,16 @@ class AdvisorEngine {
     let verts = [];
 
     const sustains = ownedNames.filter(n => MASTER_ROSTER.find(u => u.name === n)?.role === "Sustain");
-    const dpsUnits = ownedNames.filter(n => MASTER_ROSTER.find(u => u.name === n)?.role === "DPS");
-    
-    const hasRobin = ownedNames.includes("Robin");
+    const hasRobin = ownedNames.includes("Robin") || ownedNames.includes("Robin • Summeretto");
     const hasRM = ownedNames.includes("Ruan Mei");
-    const hasSparkle = ownedNames.includes("Sparkle");
+    const hasSparkle = ownedNames.includes("Sparkle") || ownedNames.includes("Sparxie");
     const hasSunday = ownedNames.includes("Sunday");
 
-    // 1. Core Role Pull Recommendations
+    // 1. Fundamental Account Balance Rules
     if (sustains.length < 2) {
       pulls.push({ 
-        title: "High Priority: Limited 5★ Sustain (Aventurine / Lingsha / Huohuo)", 
-        desc: `You currently have ${sustains.length} limited sustain(s). Reaching 2 limited 5★ sustains is the biggest account stabilization upgrade for MoC, AS, and Pure Fiction.`, 
+        title: "High Priority: Limited 5★ Sustain", 
+        desc: `You currently have ${sustains.length} limited sustain(s). Securing 2 limited sustains (Aventurine, Lingsha, Huohuo, Fu Xuan, Luocha, Permansor Terrae) is essential for MoC, AS, and Pure Fiction stability.`, 
         priority: "high" 
       });
     }
@@ -487,70 +518,77 @@ class AdvisorEngine {
     if (!hasRobin && !hasRM) {
       pulls.push({ 
         title: "Top Priority: Universal Support Core (Robin or Ruan Mei)", 
-        desc: "Robin and Ruan Mei represent the top tier of teamwide amplification. Robin empowers FUA & Hypercarry; Ruan Mei enables Break & DoT.", 
+        desc: "Robin and Ruan Mei offer unmatched party-wide damage multipliers. Robin anchors FUA and Hypercarry; Ruan Mei anchors Break and DoT.", 
         priority: "high" 
       });
     }
 
-    // 2. Dynamic Synergy Matrix (Checks ALL owned DPS units for missing optimal supports)
+    // 2. Comprehensive Synergy Evaluation Across Entire Roster
     ownedNames.forEach(name => {
       const char = MASTER_ROSTER.find(u => u.name === name);
       if (!char) return;
 
-      // Archetype Synergy Logic
       if (char.archetype === "Break" && char.role === "DPS") {
-        if (!hasRM) pulls.push({ title: `Synergy: Ruan Mei for ${name}`, desc: `${name} scales exponentially with Ruan Mei's Weakness Break Efficiency and Break Extension.`, priority: "high" });
-        if (!ownedNames.includes("Lingsha")) pulls.push({ title: `Synergy: Lingsha for ${name}`, desc: `Lingsha acts as the premier Break-sustain, applying Break vulnerability and high AoE toughness damage.`, priority: "mid" });
+        if (!hasRM) pulls.push({ title: `Synergy: Ruan Mei for ${name}`, desc: `${name} scales directly with Ruan Mei's Break Efficiency and Weakness Extension.`, priority: "high" });
+        if (!ownedNames.includes("Lingsha") && !ownedNames.includes("Trailblazer/Harmony") && !ownedNames.includes("Fugue")) {
+          pulls.push({ title: `Synergy: Super Break Core for ${name}`, desc: `Pair ${name} with Lingsha, Fugue, or Harmony Trailblazer to convert toughness damage into Super Break DMG.`, priority: "high" });
+        }
       }
 
       if (char.archetype === "FUA" && char.role === "DPS") {
-        if (!hasRobin) pulls.push({ title: `Synergy: Robin for ${name}`, desc: `Robin gains Energy on every ally follow-up attack, making her the core support for ${name}.`, priority: "high" });
-        if (!ownedNames.includes("Aventurine")) pulls.push({ title: `Synergy: Aventurine for ${name}`, desc: `Aventurine gains Blinded Bet stacks from ally follow-up attacks, achieving high shield uptime and extra DPS.`, priority: "mid" });
+        if (!hasRobin) pulls.push({ title: `Synergy: Robin for ${name}`, desc: `Robin gains Energy on every follow-up trigger, maximizing ${name}'s action output.`, priority: "high" });
+        if (!ownedNames.includes("Aventurine") && !ownedNames.includes("Aventurine • Waveflair")) {
+          pulls.push({ title: `Synergy: Aventurine for ${name}`, desc: `Aventurine's Blinded Bet stacks build faster with ally follow-up attacks, maintaining continuous shields.`, priority: "mid" });
+        }
       }
 
       if (char.archetype === "DoT") {
         if (name === "Kafka" && !ownedNames.includes("Black Swan")) {
-          pulls.push({ title: "Synergy: Black Swan for Kafka", desc: "Black Swan provides continuous Arcana stacks that Kafka detonates on Skill and Ultimate.", priority: "high" });
+          pulls.push({ title: "Synergy: Black Swan for Kafka", desc: "Black Swan provides continuous Arcana stacks that Kafka detonates on demand.", priority: "high" });
         }
         if (name === "Black Swan" && !ownedNames.includes("Kafka")) {
           pulls.push({ title: "Synergy: Kafka for Black Swan", desc: "Kafka is required to trigger Arcana stacks repeatedly outside of enemy turns.", priority: "high" });
         }
       }
 
-      if (char.name === "Acheron") {
-        if (!ownedNames.includes("Jiaoqiu")) {
-          pulls.push({ title: "Synergy: Jiaoqiu for Acheron", desc: "Jiaoqiu provides continuous stack generation on enemy turns, significantly speeding up Acheron's Ultimate rotation.", priority: "high" });
+      if (char.name === "Acheron" || char.archetype === "Nihility") {
+        if (char.name === "Acheron" && !ownedNames.includes("Jiaoqiu")) {
+          pulls.push({ title: "Synergy: Jiaoqiu for Acheron", desc: "Jiaoqiu provides continuous stack generation on enemy turns, significantly accelerating Acheron's Ultimate.", priority: "high" });
+        }
+      }
+
+      if (char.archetype === "Remembrance") {
+        if (!ownedNames.includes("Aglaea") && !ownedNames.includes("Evernight") && !ownedNames.includes("Trailblazer/Remembrance")) {
+          pulls.push({ title: `Synergy: Remembrance Core for ${name}`, desc: `${name} benefits from Servant Action Advance and Remembrance DMG multipliers provided by Remembrance supports.`, priority: "high" });
         }
       }
 
       if (char.archetype === "Hypercarry" && char.role === "DPS") {
         if (!hasSunday && !hasSparkle && !ownedNames.includes("Bronya")) {
-          pulls.push({ title: `Synergy: Turn-Advance Support for ${name}`, desc: `${name} requires direct Action Advance supports (Sunday, Sparkle, or Bronya) to maximize damage cycles.`, priority: "high" });
+          pulls.push({ title: `Synergy: Action-Advance Support for ${name}`, desc: `${name} requires direct Action Advance supports (Sunday, Sparkle, or Bronya) to optimize cycle performance.`, priority: "high" });
         }
       }
     });
 
-    // 3. Roster-Wide Vertical Investments (Eidolons & Signature LCs)
+    // 3. Roster-Wide Vertical Investments
     ownedNames.forEach(name => {
       const data = this.owned.get(name);
       const char = MASTER_ROSTER.find(u => u.name === name);
       if (!char || !data) return;
 
-      // Signature Light Cone Priority
       if (!data.hasSig && char.sigLC) {
         verts.push({
-          title: `${name} Signature LC (${char.sigLC})`,
+          title: `${name} Signature Light Cone`,
           desc: char.sigDesc,
-          priority: (char.name === "Acheron" || char.name === "Jingliu" || char.name === "Feixiao" || char.name === "Yunli") ? "high" : "mid"
+          priority: (["Acheron", "Jingliu", "Feixiao", "Yunli", "Firefly", "Aglaea", "Saber"].includes(name)) ? "high" : "mid"
         });
       }
 
-      // Eidolon Priorities
       if (data.eidolon < 1 && char.e1) {
         verts.push({
           title: `${name} Eidolon 1`,
           desc: char.e1,
-          priority: (name === "Robin" || name === "Ruan Mei" || name === "Firefly" || name === "Huohuo") ? "high" : "mid"
+          priority: (["Robin", "Ruan Mei", "Firefly", "Huohuo", "Black Swan", "Boothill", "Sunday"].includes(name)) ? "high" : "mid"
         });
       }
 
@@ -558,12 +596,12 @@ class AdvisorEngine {
         verts.push({
           title: `${name} Eidolon 2`,
           desc: char.e2,
-          priority: (name === "Acheron" || name === "Firefly" || name === "Feixiao" || name === "Dan Heng • Imbibitor Lunae") ? "high" : "mid"
+          priority: (["Acheron", "Firefly", "Feixiao", "Dan Heng • Imbibitor Lunae", "Sparkle"].includes(name)) ? "high" : "mid"
         });
       }
     });
 
-    if (pulls.length === 0) pulls.push({ title: "Roster Core Complete", desc: "Your roster covers all essential role coverage and synergy pairs. You can safely save Stellar Jades for future banners.", priority: "mid" });
+    if (pulls.length === 0) pulls.push({ title: "Roster Core Complete", desc: "Your roster covers all essential roles and synergy pairs. You can safely save Stellar Jades for future banners.", priority: "mid" });
     if (verts.length === 0) verts.push({ title: "Max Vertical Investment Reached", desc: "Your selected roster already possesses priority Signature Light Cones and Eidolons.", priority: "mid" });
 
     pullEl.innerHTML = pulls.map(p => `<div class="rec-box ${p.priority}"><div class="rec-title">${p.title}</div><div class="rec-desc">${p.desc}</div></div>`).join('');
@@ -571,7 +609,7 @@ class AdvisorEngine {
   }
 }
 
-// AV Simulator Engine
+// Action Value Simulator
 class SimEngine {
   constructor() {
     this.units = [
