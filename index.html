@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Honkai: Star Rail - Express Tactical Suite</title>
+  <style>
+    :root {
+      --bg-dark: #0b0e17;
+      --card-bg: rgba(20, 26, 43, 0.85);
+      --card-border: rgba(212, 175, 55, 0.25);
+      --hsr-gold: #d4af37;
+      --hsr-gold-light: #f3e5ab;
+      --hsr-blue: #4f709c;
+      --hsr-dark-blue: #16213e;
+      --text-main: #e2e8f0;
+      --text-muted: #94a3b8;
+      --danger: #e53e3e;
+      --gold-glow: rgba(212, 175, 55, 0.2);
+    }
+
+    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+
+    body {
+      background: var(--bg-dark);
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(79, 112, 156, 0.15) 0%, transparent 60%),
+        radial-gradient(circle at 85% 90%, rgba(212, 175, 55, 0.08) 0%, transparent 50%);
+      color: var(--text-main);
+      margin: 0;
+      padding: 2rem 1rem;
+      min-height: 100vh;
+    }
+
+    .container { max-width: 1200px; margin: 0 auto; }
+
+    header { text-align: center; margin-bottom: 2rem; }
+
+    .logo-badge {
+      display: inline-block;
+      background: rgba(212, 175, 55, 0.1);
+      border: 1px solid var(--hsr-gold);
+      color: var(--hsr-gold);
+      padding: 0.3rem 1rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      margin: 0;
+      color: #fff;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    /* Tabs */
+    .nav-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 0.5rem;
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 0.8rem 2rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      border-bottom: 2px solid transparent;
+    }
+
+    .tab-btn:hover { color: var(--hsr-gold-light); }
+
+    .tab-btn.active {
+      color: var(--hsr-gold);
+      border-bottom-color: var(--hsr-gold);
+    }
+
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    .app-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    @media (min-width: 960px) {
+      .app-grid { grid-template-columns: 480px 1fr; }
+    }
+
+    /* Glass Panels */
+    .glass-panel {
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      margin-bottom: 1.5rem;
+    }
+
+    .panel-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--hsr-gold);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 1.2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Form Controls */
+    .search-input, input[type="text"], input[type="number"], select {
+      background: rgba(10, 14, 26, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #fff;
+      padding: 0.55rem 0.75rem;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      width: 100%;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--hsr-gold);
+      box-shadow: 0 0 8px var(--gold-glow);
+    }
+
+    .field-group { margin-bottom: 0.8rem; }
+    label { font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 0.25rem; text-transform: uppercase; font-weight: 600; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+
+    /* Roster Grid */
+    .roster-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 0.75rem;
+      max-height: 480px;
+      overflow-y: auto;
+      padding-right: 0.3rem;
+    }
+
+    .char-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 6px;
+      padding: 0.6rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .char-card:hover { border-color: rgba(212, 175, 55, 0.5); transform: translateY(-2px); }
+
+    .char-card.selected {
+      border-color: var(--hsr-gold);
+      background: rgba(212, 175, 55, 0.08);
+      box-shadow: 0 0 10px var(--gold-glow);
+    }
+
+    .char-name {
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-align: center;
+      color: var(--text-main);
+      margin-bottom: 0.4rem;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card-controls { display: flex; gap: 0.3rem; width: 100%; }
+
+    /* Simulator Units */
+    .unit-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 6px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .card-top { display: flex; gap: 0.5rem; margin-bottom: 0.8rem; }
+
+    .pill-presets { display: flex; gap: 0.3rem; margin-top: 0.4rem; }
+    .pill {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-muted);
+      border-radius: 4px;
+      padding: 0.15rem 0.4rem;
+      font-size: 0.68rem;
+      cursor: pointer;
+    }
+    .pill:hover { color: var(--hsr-gold-light); border-color: var(--hsr-gold); }
+
+    /* Buttons */
+    .hsr-btn {
+      background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(212, 175, 55, 0.05));
+      border: 1px solid var(--hsr-gold);
+      color: var(--hsr-gold-light);
+      padding: 0.75rem 1.2rem;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      width: 100%;
+      transition: all 0.2s;
+    }
+
+    .hsr-btn:hover { background: var(--hsr-gold); color: #000; }
+    .hsr-btn.small { padding: 0.3rem 0.6rem; font-size: 0.75rem; width: auto; }
+    .hsr-btn.danger { border-color: var(--danger); color: var(--danger); background: rgba(229, 62, 62, 0.1); }
+    .hsr-btn.danger:hover { background: var(--danger); color: #fff; }
+
+    /* Output Styling */
+    .rec-box {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-left: 4px solid var(--hsr-gold);
+      border-radius: 4px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .rec-box.high { border-left-color: var(--hsr-gold); }
+    .rec-box.mid { border-left-color: var(--hsr-blue); }
+    .rec-title { font-weight: 700; font-size: 0.95rem; color: #fff; margin-bottom: 0.3rem; }
+    .rec-desc { font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; }
+
+    .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 0.75rem; margin-bottom: 1.5rem; }
+    .summary-card { background: rgba(212, 175, 55, 0.05); border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 6px; padding: 0.8rem; text-align: center; }
+    .summary-card .count { font-size: 1.6rem; font-weight: 800; color: var(--hsr-gold); }
+    .summary-card .name { font-size: 0.8rem; color: var(--text-main); font-weight: 600; margin-top: 0.2rem; }
+
+    .timeline { display: flex; flex-direction: column; gap: 0.6rem; }
+    .timeline-node {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-left: 4px solid var(--hsr-blue);
+      border-radius: 4px;
+      padding: 0.75rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .timeline-node.ult-event { border-left-color: #a855f7; background: rgba(168, 85, 247, 0.06); }
+    .timeline-node.advance-event { border-left-color: var(--hsr-gold); background: rgba(212, 175, 55, 0.06); }
+    .timeline-node.cycle-marker { background: rgba(212, 175, 55, 0.06); border: 1px dashed var(--hsr-gold); border-left: 4px solid var(--hsr-gold); color: var(--hsr-gold); font-size: 0.85rem; font-weight: 700; }
+
+    .badge { background: rgba(79, 112, 156, 0.2); color: var(--hsr-blue); font-weight: 700; font-size: 0.72rem; padding: 0.2rem 0.5rem; border-radius: 4px; border: 1px solid rgba(79, 112, 156, 0.3); }
+    .badge.ult { background: rgba(168, 85, 247, 0.2); color: #a855f7; border-color: #a855f7; }
+    .badge.adv { background: rgba(212, 175, 55, 0.2); color: var(--hsr-gold); border-color: var(--hsr-gold); }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <div class="logo-badge">Honkai: Star Rail</div>
+    <h1>Express Tactical Suite</h1>
+  </header>
+
+  <div class="nav-tabs">
+    <button class="tab-btn active" onclick="switchTab('advisorTab', this)">Roster & Pull Advisor</button>
+    <button class="tab-btn" onclick="switchTab('simTab', this)">AV Simulator</button>
+  </div>
+
+  <!-- TAB 1: PULL & INVESTMENT ADVISOR -->
+  <div id="advisorTab" class="tab-content active">
+    <div class="app-grid">
+      <div class="glass-panel">
+        <div class="panel-title">Owned Roster Setup</div>
+        <input type="text" id="characterSearch" class="search-input" placeholder="Search character name..." oninput="advisor.filterRoster()">
+        <div id="rosterGrid" class="roster-grid"></div>
+        <div style="margin-top: 1.2rem;">
+          <button class="hsr-btn" onclick="advisor.analyze()">Generate Strategic Recommendations</button>
+        </div>
+      </div>
+
+      <div>
+        <div class="glass-panel">
+          <div class="panel-title">Priority Pull Recommendations</div>
+          <div id="pullRecommendations">
+            <div style="color: var(--text-muted); font-size: 0.85rem;">Select your owned 5★ units on the left and click generate to view recommended pull priorities.</div>
+          </div>
+        </div>
+
+        <div class="glass-panel">
+          <div class="panel-title">Vertical Investment Priorities (Eidolons & LCs)</div>
+          <div id="verticalInvestments">
+            <div style="color: var(--text-muted); font-size: 0.85rem;">Vertical investment paths (E1/E2/S1) will be calculated based on your owned roster.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: AV SIMULATOR -->
+  <div id="simTab" class="tab-content">
+    <div class="app-grid">
+      <div class="glass-panel">
+        <div class="panel-title">
+          <span>Party Members</span>
+          <button class="hsr-btn small" onclick="sim.addUnit()">+ Add Unit</button>
+        </div>
+        <div id="simUnitContainer"></div>
+        <div class="field-group" style="margin-top: 1rem;">
+          <label>Simulation Limit (AV Threshold)</label>
+          <select id="simLimitSelect">
+            <option value="150">Cycle 0 Only (150 AV)</option>
+            <option value="250">Cycles 0 - 1 (250 AV)</option>
+            <option value="350" selected>Cycles 0 - 2 (350 AV)</option>
+            <option value="450">Cycles 0 - 3 (450 AV)</option>
+          </select>
+        </div>
+        <button class="hsr-btn" onclick="sim.runSimulation()">▶ Calculate Turn Queue</button>
+      </div>
+
+      <div>
+        <div class="glass-panel" style="padding: 1rem;">
+          <div class="panel-title" style="margin-bottom: 0.8rem; font-size: 0.9rem;">Total Turns Achieved</div>
+          <div id="summaryContainer" class="summary-grid"></div>
+        </div>
+        <div class="glass-panel">
+          <div class="panel-title">Action Queue Stream</div>
+          <div id="timelineOutput" class="timeline"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function switchTab(tabId, btn) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  btn.classList.add('active');
+}
+
+// Master Character Data with specific investment profiles across all 5-stars
+const MASTER_ROSTER = [
+  { name: "Acheron", role: "DPS", archetype: "Nihility", sigLC: "Along the Passing Shore", sigDesc: "Crutial for stack generation per turn + CRIT DMG.", e1: "18% CRIT Rate against debuffed targets.", e2: "Requires only 1 Nihility teammate; unlocks Harmony supports." },
+  { name: "Aglaea", role: "DPS", archetype: "Remembrance", sigLC: "Signature Light Cone", sigDesc: "Massive SPD + Summon/Remembrance DMG multiplier.", e1: "Increases Summon Action Advance frequency.", e2: "Ignores DEF during joint attacks." },
+  { name: "Anaxa", role: "DPS", archetype: "Erudition", sigLC: "Signature Light Cone", sigDesc: "AoE DEF Shred + Ultimate Energy Regeneration.", e1: "Triggers follow-up attack when enemies hit low HP.", e2: "Ultimate ignores 20% All-Type RES." },
+  { name: "Argenti", role: "DPS", archetype: "Erudition", sigLC: "An Instant Before A Gaze", sigDesc: "High Ultimate DMG multiplier based on Max Energy.", e1: "Grants 40% CRIT DMG stacking from Talent.", e2: "ATK% boost when 3+ enemies are present." },
+  { name: "Aventurine", role: "Sustain", archetype: "FUA", sigLC: "Inherently Unjust Destiny", sigDesc: "DEF boost + vulnerability debuff on enemy follow-up.", e1: "Ultimate applies Shield; team CRIT DMG +20%.", e2: "Basic ATK applies 12% All-Type RES PEN debuff." },
+  { name: "Black Swan", role: "DPS", archetype: "DoT", sigLC: "Reforged Remembrance", sigDesc: "EHR boost + massive DEF ignore on DoT triggers.", e1: "Reduces enemy RES by 25% for active DoT types.", e2: "Spreads Arcana stacks when an enemy is defeated." },
+  { name: "Blade", role: "DPS", archetype: "Hypercarry", sigLC: "The Unreachable Side", sigDesc: "Max HP% boost + incoming damage enhancement.", e1: "Ultimate single-target execute DMG scaling.", e2: "Increases CRIT Rate by 15% while Hellscape is active." },
+  { name: "Boothill", role: "DPS", archetype: "Break", sigLC: "Sailing Towards a Second Life", sigDesc: "Break Effect + DEF ignore on Break DMG + Speed.", e1: "Starts battle with 1 Pocket Trickshot; ignores 16% DEF.", e2: "Regenerates 1 SP when triggering Pocket Trickshot." },
+  { name: "Bronya", role: "Support", archetype: "Hypercarry", sigLC: "But the Battle Isn't Over", sigDesc: "Energy Regen + SP refund on Ult + Next Ally DMG%", e1: "50% chance to recover 1 SP when using Skill.", e2: "Advanced target gains +30% SPD for 1 turn." },
+  { name: "Castorice", role: "DPS", archetype: "Quantum", sigLC: "Signature Light Cone", sigDesc: "Quantum RES PEN + HP-drain damage scaling.", e1: "Increases Skill CRIT Rate based on lost HP.", e2: "Immediate extra turn on Ultimate cast." },
+  { name: "Dan Heng • Imbibitor Lunae", role: "DPS", archetype: "Hypercarry", sigLC: "Brighter Than the Sun", sigDesc: "CRIT Rate + Energy Regen on 3-EBA.", e1: "Increases Righteous Heart stacks max limit.", e2: "100% Action Advance after Ultimate + 1 Squama Sacra." },
+  { name: "Dr. Ratio", role: "DPS", archetype: "FUA", sigLC: "Baptism of Pure Thought", sigDesc: "CRIT DMG boost + ignores DEF per debuff on target.", e1: "Increases Summation stack limit by 4.", e2: "Follow-up deals extra trace damage per debuff." },
+  { name: "Feixiao", role: "DPS", archetype: "FUA", sigLC: "I Venture Forth to Hunt", sigDesc: "CRIT Rate + DEF ignore on Ultimate attacks.", e1: "Increases Ultimate DMG scaling per stack.", e2: "Doubles Flying Aureus stack gain from ally FUAs." },
+  { name: "Firefly", role: "DPS", archetype: "Break", sigLC: "Where Dreams Dwell", sigDesc: "Break Effect + enemy slow + incoming Break DMG increase.", e1: "Enhanced Skill ignores 15% DEF and costs 0 SP.", e2: "Grants extra turn upon breaking or killing an enemy." },
+  { name: "Fu Xuan", role: "Sustain", archetype: "Universal", sigLC: "She Already Shut Her Eyes", sigDesc: "HP% + ER% + Team DMG boost + wave HP regen.", e1: "Knowledge state grants team +30% CRIT DMG.", e2: "Team revive once per battle during Skill." },
+  { name: "Fugue", role: "Support", archetype: "Break", sigLC: "Signature Light Cone", sigDesc: "Break Effect sharing + weakness break efficiency.", e1: "Reduces enemy Break Recovery speed.", e2: "Team Super Break DMG multiplier increase." },
+  { name: "Gepard", role: "Sustain", archetype: "Universal", sigLC: "Moment of Victory", sigDesc: "DEF% boost + Effect Hit Rate + Agro increase.", e1: "Skill freeze base probability increases to 100%.", e2: "Enemies slowed after unfreezing." },
+  { name: "Himeko", role: "DPS", archetype: "Erudition", sigLC: "Night on the Milky Way", sigDesc: "ATK% per enemy + Break DMG boost.", e1: "Gains 20% SPD for 2 turns after Talent triggers.", e2: "Deals 15% extra DMG to enemies below 50% HP." },
+  { name: "Huohuo", role: "Sustain", archetype: "Universal", sigLC: "Night of Fright", sigDesc: "Energy Regen + Healing scaling ATK% buff.", e1: "Skill grants team +12% SPD and 1 extra turn duration.", e2: "Revives downed ally during Divine Provision state." },
+  { name: "Jade", role: "DPS", archetype: "FUA", sigLC: "Yet Hope Is Priceless", sigDesc: "CRIT Rate + FUA DMG DEF ignore stacking.", e1: "Debt Collector ally attacks grant extra Pawn stacks.", e2: "Grants 18% CRIT Rate when Pawn stacks reach 15." },
+  { name: "Jiaoqiu", role: "Support", archetype: "Nihility", sigLC: "Those Many Springs", sigDesc: "Effect Hit Rate + enemy vulnerability debuff.", e1: "Team deals 48% increased DMG to Ashen Roast targets.", e2: "Ashen Roast DoT scaling dramatically increased." },
+  { name: "Jing Yuan", role: "DPS", archetype: "FUA", sigLC: "Before Dawn", sigDesc: "Massive CRIT DMG + Skill/Ult/FUA DMG multipliers.", e1: "Lightning-Lord adjacent target damage increased.", e2: "Increases Basic/Skill/Ult damage after Lightning-Lord acts." },
+  { name: "Jingliu", role: "DPS", archetype: "Hypercarry", sigLC: "I Shall Be My Own Sword", sigDesc: "CRIT DMG + Ally HP drain for DEF ignore.", e1: "Single target Ultimate/Skill gains massive CRIT DMG.", e2: "Next Enhanced Skill after Ult deals +80% DMG." },
+  { name: "Kafka", role: "DPS", archetype: "DoT", sigLC: "Patience Is All You Need", sigDesc: "SPD stacking + Erosion DoT application.", e1: "Talent FUA increases DoT taken by target by 30%.", e2: "While Kafka is alive, team DoT DMG increases by 25%." },
+  { name: "Lingsha", role: "Sustain", archetype: "Break", sigLC: "Scent Alone Stays True", sigDesc: "Break Effect + enemy Break DMG vulnerability.", e1: "Weakness Break Efficiency +20%; reduces enemy DEF when broken.", e2: "Ultimate grants team +40% Break Effect." },
+  { name: "Luocha", role: "Sustain", archetype: "Universal", sigLC: "Echoes of the Coffin", sigDesc: "ATK% boost + Team SPD buff on Ultimate.", e1: "Field grants team +20% ATK.", e2: "Skill shield or healing output increased." },
+  { name: "Rappa", role: "DPS", archetype: "Break", sigLC: "Ninjutsu Inscription", sigDesc: "Break Effect + Energy gain on wave start.", e1: "Enhanced Basic ATK ignores 15% DEF.", e2: "Breaks enemy toughness bar regardless of weakness type." },
+  { name: "Robin", role: "Support", archetype: "Universal", sigLC: "Flowing Nightglow", sigDesc: "Energy Regen + Team ATK% buff while Concerto active.", e1: "Concerto state grants team 24% All-Type RES PEN.", e2: "Concerto state grants team +16% SPD." },
+  { name: "Ruan Mei", role: "Support", archetype: "Universal", sigLC: "Past Self in Mirror", sigDesc: "Break Effect + Team DMG% + SP generation on Ult.", e1: "Ultimate field ignores 20% of enemy DEF.", e2: "Team ATK +40% when attacking Weakness Broken enemies." },
+  { name: "Silver Wolf", role: "Support", archetype: "Nihility", sigLC: "Incessant Rain", sigDesc: "Effect Hit Rate + CRIT Rate + Aether Code debuff.", e1: "Regenerates Energy per debuff on enemy when using Ult.", e2: "Enemies entering battle have Effect RES reduced by 20%." },
+  { name: "Sparkle", role: "Support", archetype: "Hypercarry", sigLC: "Earthly Escapade", sigDesc: "CRIT DMG boost + team CRIT Rate/DMG aura.", e1: "Cipher state grants +40% ATK and extends duration.", e2: "Cipher stacks ignore 8% enemy DEF per stack (max 24%)." },
+  { name: "Sunday", role: "Support", archetype: "Hypercarry", sigLC: "A Grounded Ascent", sigDesc: "Energy Regen + Target CRIT DMG scaling.", e1: "Skill target ignores 16% DEF on attacks.", e2: "Ultimate regenerates SP and boosts team Speed." },
+  { name: "The Herta", role: "DPS", archetype: "Erudition", sigLC: "Signature Light Cone", sigDesc: "AoE CRIT DMG + Erudition skill stacking.", e1: "Talent triggers at higher enemy HP thresholds.", e2: "Increases Speed and Energy Gain per AoE trigger." },
+  { name: "Topaz & Numby", role: "DPS", archetype: "FUA", sigLC: "Worblesd-d-d!", sigDesc: "CRIT Rate + FUA CRIT DMG vulnerability.", e1: "Debuff stacks up to 50% CRIT DMG for FUA attacks.", e2: "Numby attacks restore 5 Energy to Topaz." },
+  { name: "Trailblazer/Harmony", role: "Support", archetype: "Break", sigLC: "Memories of the Past", sigDesc: "Break Effect + Energy on attack.", e1: "First Skill uses 0 SP.", e2: "Energy regen boost at battle start." },
+  { name: "Yunli", role: "DPS", archetype: "Counter", sigLC: "Dance at Sunset", sigDesc: "Massive Agro increase + Counter CRIT DMG.", e1: "Intuit: Slash / Cull damage increased significantly.", e2: "Counter attacks ignore 20% of enemy DEF." }
+];
+
+class AdvisorEngine {
+  constructor() {
+    this.owned = new Map();
+    // Pre-populate defaults
+    this.owned.set("Acheron", { eidolon: 0, hasSig: false });
+    this.owned.set("Aventurine", { eidolon: 0, hasSig: false });
+  }
+
+  init() {
+    this.renderRoster();
+  }
+
+  renderRoster(filter = "") {
+    const grid = document.getElementById('rosterGrid');
+    grid.innerHTML = '';
+
+    MASTER_ROSTER.filter(u => u.name.toLowerCase().includes(filter.toLowerCase())).forEach(u => {
+      const isOwned = this.owned.has(u.name);
+      const data = this.owned.get(u.name) || { eidolon: 0, hasSig: false };
+
+      const card = document.createElement('div');
+      card.className = `char-card ${isOwned ? 'selected' : ''}`;
+
+      card.innerHTML = `
+        <div class="char-name">${u.name}</div>
+        ${isOwned ? `
+          <div class="card-controls" onclick="event.stopPropagation()">
+            <select onchange="advisor.updateE('${u.name}', parseInt(this.value))">
+              ${[0,1,2,3,4,5,6].map(e => `<option value="${e}" ${data.eidolon === e ? 'selected' : ''}>E${e}</option>`).join('')}
+            </select>
+            <button style="background:${data.hasSig ? 'var(--hsr-gold)' : 'transparent'}; color:${data.hasSig ? '#000' : '#fff'}; border:1px solid var(--hsr-gold); border-radius:4px; font-size:0.65rem; cursor:pointer;" onclick="advisor.toggleSig('${u.name}')">LC</button>
+          </div>
+        ` : ''}
+      `;
+
+      card.onclick = () => {
+        if (this.owned.has(u.name)) this.owned.delete(u.name);
+        else this.owned.set(u.name, { eidolon: 0, hasSig: false });
+        this.renderRoster(filter);
+      };
+
+      grid.appendChild(card);
+    });
+  }
+
+  filterRoster() {
+    const val = document.getElementById('characterSearch').value;
+    this.renderRoster(val);
+  }
+
+  updateE(name, val) {
+    if (this.owned.has(name)) this.owned.get(name).eidolon = val;
+  }
+
+  toggleSig(name) {
+    if (this.owned.has(name)) {
+      this.owned.get(name).hasSig = !this.owned.get(name).hasSig;
+      this.renderRoster(document.getElementById('characterSearch').value);
+    }
+  }
+
+  analyze() {
+    const ownedNames = Array.from(this.owned.keys());
+    const pullEl = document.getElementById('pullRecommendations');
+    const vertEl = document.getElementById('verticalInvestments');
+
+    let pulls = [];
+    let verts = [];
+
+    const sustains = ownedNames.filter(n => MASTER_ROSTER.find(u => u.name === n)?.role === "Sustain");
+    const dpsUnits = ownedNames.filter(n => MASTER_ROSTER.find(u => u.name === n)?.role === "DPS");
+    
+    const hasRobin = ownedNames.includes("Robin");
+    const hasRM = ownedNames.includes("Ruan Mei");
+    const hasSparkle = ownedNames.includes("Sparkle");
+    const hasSunday = ownedNames.includes("Sunday");
+
+    // 1. Core Role Pull Recommendations
+    if (sustains.length < 2) {
+      pulls.push({ 
+        title: "High Priority: Limited 5★ Sustain (Aventurine / Lingsha / Huohuo)", 
+        desc: `You currently have ${sustains.length} limited sustain(s). Reaching 2 limited 5★ sustains is the biggest account stabilization upgrade for MoC, AS, and Pure Fiction.`, 
+        priority: "high" 
+      });
+    }
+
+    if (!hasRobin && !hasRM) {
+      pulls.push({ 
+        title: "Top Priority: Universal Support Core (Robin or Ruan Mei)", 
+        desc: "Robin and Ruan Mei represent the top tier of teamwide amplification. Robin empowers FUA & Hypercarry; Ruan Mei enables Break & DoT.", 
+        priority: "high" 
+      });
+    }
+
+    // 2. Dynamic Synergy Matrix (Checks ALL owned DPS units for missing optimal supports)
+    ownedNames.forEach(name => {
+      const char = MASTER_ROSTER.find(u => u.name === name);
+      if (!char) return;
+
+      // Archetype Synergy Logic
+      if (char.archetype === "Break" && char.role === "DPS") {
+        if (!hasRM) pulls.push({ title: `Synergy: Ruan Mei for ${name}`, desc: `${name} scales exponentially with Ruan Mei's Weakness Break Efficiency and Break Extension.`, priority: "high" });
+        if (!ownedNames.includes("Lingsha")) pulls.push({ title: `Synergy: Lingsha for ${name}`, desc: `Lingsha acts as the premier Break-sustain, applying Break vulnerability and high AoE toughness damage.`, priority: "mid" });
+      }
+
+      if (char.archetype === "FUA" && char.role === "DPS") {
+        if (!hasRobin) pulls.push({ title: `Synergy: Robin for ${name}`, desc: `Robin gains Energy on every ally follow-up attack, making her the core support for ${name}.`, priority: "high" });
+        if (!ownedNames.includes("Aventurine")) pulls.push({ title: `Synergy: Aventurine for ${name}`, desc: `Aventurine gains Blinded Bet stacks from ally follow-up attacks, achieving high shield uptime and extra DPS.`, priority: "mid" });
+      }
+
+      if (char.archetype === "DoT") {
+        if (name === "Kafka" && !ownedNames.includes("Black Swan")) {
+          pulls.push({ title: "Synergy: Black Swan for Kafka", desc: "Black Swan provides continuous Arcana stacks that Kafka detonates on Skill and Ultimate.", priority: "high" });
+        }
+        if (name === "Black Swan" && !ownedNames.includes("Kafka")) {
+          pulls.push({ title: "Synergy: Kafka for Black Swan", desc: "Kafka is required to trigger Arcana stacks repeatedly outside of enemy turns.", priority: "high" });
+        }
+      }
+
+      if (char.name === "Acheron") {
+        if (!ownedNames.includes("Jiaoqiu")) {
+          pulls.push({ title: "Synergy: Jiaoqiu for Acheron", desc: "Jiaoqiu provides continuous stack generation on enemy turns, significantly speeding up Acheron's Ultimate rotation.", priority: "high" });
+        }
+      }
+
+      if (char.archetype === "Hypercarry" && char.role === "DPS") {
+        if (!hasSunday && !hasSparkle && !ownedNames.includes("Bronya")) {
+          pulls.push({ title: `Synergy: Turn-Advance Support for ${name}`, desc: `${name} requires direct Action Advance supports (Sunday, Sparkle, or Bronya) to maximize damage cycles.`, priority: "high" });
+        }
+      }
+    });
+
+    // 3. Roster-Wide Vertical Investments (Eidolons & Signature LCs)
+    ownedNames.forEach(name => {
+      const data = this.owned.get(name);
+      const char = MASTER_ROSTER.find(u => u.name === name);
+      if (!char || !data) return;
+
+      // Signature Light Cone Priority
+      if (!data.hasSig && char.sigLC) {
+        verts.push({
+          title: `${name} Signature LC (${char.sigLC})`,
+          desc: char.sigDesc,
+          priority: (char.name === "Acheron" || char.name === "Jingliu" || char.name === "Feixiao" || char.name === "Yunli") ? "high" : "mid"
+        });
+      }
+
+      // Eidolon Priorities
+      if (data.eidolon < 1 && char.e1) {
+        verts.push({
+          title: `${name} Eidolon 1`,
+          desc: char.e1,
+          priority: (name === "Robin" || name === "Ruan Mei" || name === "Firefly" || name === "Huohuo") ? "high" : "mid"
+        });
+      }
+
+      if (data.eidolon < 2 && char.e2) {
+        verts.push({
+          title: `${name} Eidolon 2`,
+          desc: char.e2,
+          priority: (name === "Acheron" || name === "Firefly" || name === "Feixiao" || name === "Dan Heng • Imbibitor Lunae") ? "high" : "mid"
+        });
+      }
+    });
+
+    if (pulls.length === 0) pulls.push({ title: "Roster Core Complete", desc: "Your roster covers all essential role coverage and synergy pairs. You can safely save Stellar Jades for future banners.", priority: "mid" });
+    if (verts.length === 0) verts.push({ title: "Max Vertical Investment Reached", desc: "Your selected roster already possesses priority Signature Light Cones and Eidolons.", priority: "mid" });
+
+    pullEl.innerHTML = pulls.map(p => `<div class="rec-box ${p.priority}"><div class="rec-title">${p.title}</div><div class="rec-desc">${p.desc}</div></div>`).join('');
+    vertEl.innerHTML = verts.map(v => `<div class="rec-box ${v.priority}"><div class="rec-title">${v.title}</div><div class="rec-desc">${v.desc}</div></div>`).join('');
+  }
+}
+
+// AV Simulator Engine
+class SimEngine {
+  constructor() {
+    this.units = [
+      { id: 1, name: 'Pela', speed: 161, relicSet: 'eagle', ultCycle: 2, danceAdvance: 0, actionAdvanceAmount: 0, advanceTarget: 'none' },
+      { id: 2, name: 'Bronya', speed: 134, relicSet: 'none', ultCycle: 3, danceAdvance: 0, actionAdvanceAmount: 100, advanceTarget: '1' }
+    ];
+  }
+
+  init() {
+    this.renderUnits();
+    this.runSimulation();
+  }
+
+  addUnit() {
+    this.units.push({
+      id: Date.now(),
+      name: `Unit ${this.units.length + 1}`,
+      speed: 120,
+      relicSet: 'none',
+      ultCycle: 3,
+      danceAdvance: 0,
+      actionAdvanceAmount: 0,
+      advanceTarget: 'none'
+    });
+    this.renderUnits();
+    this.runSimulation();
+  }
+
+  removeUnit(id) {
+    this.units = this.units.filter(u => u.id !== id);
+    this.renderUnits();
+    this.runSimulation();
+  }
+
+  updateUnit(id, field, value) {
+    const unit = this.units.find(u => u.id === id);
+    if (unit) unit[field] = value;
+  }
+
+  renderUnits() {
+    const container = document.getElementById('simUnitContainer');
+    container.innerHTML = '';
+
+    this.units.forEach(u => {
+      const card = document.createElement('div');
+      card.className = 'unit-card';
+
+      let targetOptions = `<option value="none" ${u.advanceTarget === 'none' ? 'selected' : ''}>No Target</option><option value="team" ${u.advanceTarget === 'team' ? 'selected' : ''}>Entire Team</option>`;
+      this.units.forEach(other => {
+        if (other.id !== u.id) {
+          targetOptions += `<option value="${other.id}" ${u.advanceTarget.toString() === other.id.toString() ? 'selected' : ''}>${other.name}</option>`;
+        }
+      });
+
+      card.innerHTML = `
+        <div class="card-top">
+          <input type="text" style="font-weight: bold;" value="${u.name}" onchange="sim.updateUnit(${u.id}, 'name', this.value); sim.renderUnits();">
+          ${this.units.length > 1 ? `<button class="hsr-btn small danger" onclick="sim.removeUnit(${u.id})">✕</button>` : ''}
+        </div>
+        <div class="grid-2 field-group">
+          <div>
+            <label>Speed (SPD)</label>
+            <input type="number" value="${u.speed}" step="0.1" oninput="sim.updateUnit(${u.id}, 'speed', parseFloat(this.value) || 0)">
+            <div class="pill-presets">
+              <span class="pill" onclick="sim.updateUnit(${u.id}, 'speed', 134); sim.renderUnits();">134</span>
+              <span class="pill" onclick="sim.updateUnit(${u.id}, 'speed', 143); sim.renderUnits();">143</span>
+              <span class="pill" onclick="sim.updateUnit(${u.id}, 'speed', 160.1); sim.renderUnits();">160.1</span>
+            </div>
+          </div>
+          <div>
+            <label>Relic / Planar Set</label>
+            <select onchange="sim.updateUnit(${u.id}, 'relicSet', this.value)">
+              <option value="none" ${u.relicSet === 'none' ? 'selected' : ''}>Standard Set</option>
+              <option value="vonwacq" ${u.relicSet === 'vonwacq' ? 'selected' : ''}>Sprightly Vonwacq / Lushaka</option>
+              <option value="eagle" ${u.relicSet === 'eagle' ? 'selected' : ''}>4pc Eagle of Twilight</option>
+            </select>
+          </div>
+        </div>
+        <div class="grid-2 field-group">
+          <div>
+            <label>Ult Frequency</label>
+            <select onchange="sim.updateUnit(${u.id}, 'ultCycle', parseInt(this.value))">
+              <option value="0" ${u.ultCycle === 0 ? 'selected' : ''}>Manual / None</option>
+              <option value="1" ${u.ultCycle === 1 ? 'selected' : ''}>Every 1 Turn</option>
+              <option value="2" ${u.ultCycle === 2 ? 'selected' : ''}>Every 2 Turns</option>
+              <option value="3" ${u.ultCycle === 3 ? 'selected' : ''}>Every 3 Turns</option>
+            </select>
+          </div>
+          <div>
+            <label>Dance! Dance! Dance!</label>
+            <select onchange="sim.updateUnit(${u.id}, 'danceAdvance', parseFloat(this.value))">
+              <option value="0" ${u.danceAdvance === 0 ? 'selected' : ''}>None</option>
+              <option value="16" ${u.danceAdvance === 16 ? 'selected' : ''}>S1 (16% Advance)</option>
+              <option value="24" ${u.danceAdvance === 24 ? 'selected' : ''}>S5 (24% Advance)</option>
+            </select>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div>
+            <label>Skill Action Advance %</label>
+            <input type="number" value="${u.actionAdvanceAmount}" placeholder="e.g. 100 or 50" oninput="sim.updateUnit(${u.id}, 'actionAdvanceAmount', parseFloat(this.value) || 0)">
+          </div>
+          <div>
+            <label>Advance Target</label>
+            <select onchange="sim.updateUnit(${u.id}, 'advanceTarget', this.value)">${targetOptions}</select>
+          </div>
+        </div>
+      `;
+      container.appendChild(card);
+    });
+  }
+
+  runSimulation() {
+    const maxAV = parseFloat(document.getElementById('simLimitSelect').value);
+
+    let state = this.units.map(u => {
+      const baseAV = u.speed > 0 ? (10000 / u.speed) : 999999;
+      let startAdvance = u.danceAdvance;
+      if (u.relicSet === 'vonwacq') startAdvance += 40;
+      return {
+        ...u,
+        baseAV: baseAV,
+        currentAV: Math.max(0, baseAV * (1 - (startAdvance / 100))),
+        turnsTaken: 0,
+        startAdvanceApplied: startAdvance
+      };
+    });
+
+    let currentSimAV = 0;
+    let cycle = 0;
+    let cycleThreshold = 150;
+    let timelineEvents = [];
+
+    while (currentSimAV <= maxAV) {
+      state.sort((a, b) => a.currentAV - b.currentAV);
+      let actor = state[0];
+      let avPassed = actor.currentAV;
+
+      currentSimAV += avPassed;
+      if (currentSimAV > maxAV) break;
+
+      while (currentSimAV >= cycleThreshold && cycleThreshold <= maxAV) {
+        timelineEvents.push({ type: 'cycle', cycleNumber: cycle, limit: cycleThreshold });
+        cycle++;
+        cycleThreshold += 100;
+      }
+
+      state.forEach(u => u.currentAV -= avPassed);
+      actor.turnsTaken++;
+
+      timelineEvents.push({
+        type: 'turn',
+        name: actor.name,
+        turnNum: actor.turnsTaken,
+        simAV: currentSimAV,
+        speed: actor.speed,
+        note: (actor.turnsTaken === 1 && actor.startAdvanceApplied > 0) ? `-${actor.startAdvanceApplied}% Start AV` : ''
+      });
+
+      if (actor.actionAdvanceAmount > 0) {
+        if (actor.advanceTarget === 'team') {
+          state.forEach(u => {
+            if (u.id !== actor.id) u.currentAV = Math.max(0, u.currentAV - (u.baseAV * (actor.actionAdvanceAmount / 100)));
+          });
+          timelineEvents.push({ type: 'advance', name: actor.name, simAV: currentSimAV, note: `Advanced Entire Team by ${actor.actionAdvanceAmount}%` });
+        } else if (actor.advanceTarget !== 'none') {
+          let targetUnit = state.find(u => u.id.toString() === actor.advanceTarget.toString());
+          if (targetUnit) {
+            targetUnit.currentAV = Math.max(0, targetUnit.currentAV - (targetUnit.baseAV * (actor.actionAdvanceAmount / 100)));
+            timelineEvents.push({ type: 'advance', name: actor.name, simAV: currentSimAV, note: `Advanced ${targetUnit.name} by ${actor.actionAdvanceAmount}%` });
+          }
+        }
+      }
+
+      let nextTurnAV = actor.baseAV;
+      if (actor.relicSet === 'eagle' && actor.ultCycle > 0) {
+        if (actor.turnsTaken % actor.ultCycle === 0) {
+          nextTurnAV -= (actor.baseAV * 0.25);
+          timelineEvents.push({ type: 'ult', name: actor.name, simAV: currentSimAV, note: 'Eagle 4pc Triggered (-25% Base AV)' });
+        }
+      }
+      actor.currentAV = Math.max(0, nextTurnAV);
+    }
+
+    // Render Summary
+    const summaryContainer = document.getElementById('summaryContainer');
+    summaryContainer.innerHTML = '';
+    this.units.forEach(u => {
+      let unitState = state.find(s => s.id === u.id);
+      let turns = unitState ? unitState.turnsTaken : 0;
+      const card = document.createElement('div');
+      card.className = 'summary-card';
+      card.innerHTML = `<div class="count">${turns}</div><div class="name">${u.name}</div>`;
+      summaryContainer.appendChild(card);
+    });
+
+    // Render Stream
+    const output = document.getElementById('timelineOutput');
+    output.innerHTML = '';
+
+    timelineEvents.forEach(e => {
+      const node = document.createElement('div');
+      if (e.type === 'cycle') {
+        node.className = 'timeline-node cycle-marker';
+        node.innerHTML = `<span>End of MoC Cycle ${e.cycleNumber}</span> <span>${e.limit} Cumulative AV</span>`;
+      } else if (e.type === 'ult') {
+        node.className = 'timeline-node ult-event';
+        node.innerHTML = `<div style="display:flex; align-items:center; gap:0.6rem;"><span class="badge ult">ULT</span><div><div style="font-weight:700; color:#a855f7; font-size:0.9rem;">${e.name} Cast Ultimate</div><div style="font-size:0.75rem; color:var(--text-muted);">${e.note}</div></div></div><div style="font-weight:700; color:#a855f7;">${e.simAV.toFixed(1)} AV</div>`;
+      } else if (e.type === 'advance') {
+        node.className = 'timeline-node advance-event';
+        node.innerHTML = `<div style="display:flex; align-items:center; gap:0.6rem;"><span class="badge adv">SKILL</span><div><div style="font-weight:700; color:var(--hsr-gold); font-size:0.9rem;">${e.name} Action Advance</div><div style="font-size:0.75rem; color:var(--text-muted);">${e.note}</div></div></div><div style="font-weight:700; color:var(--hsr-gold);">${e.simAV.toFixed(1)} AV</div>`;
+      } else {
+        node.className = 'timeline-node';
+        const noteText = e.note ? `<span style="font-size:0.75rem; color:var(--hsr-gold); margin-left:0.4rem;">(${e.note})</span>` : '';
+        node.innerHTML = `<div style="display:flex; align-items:center; gap:0.6rem;"><span class="badge">Turn ${e.turnNum}</span><div><div style="font-weight:700; font-size:0.95rem;">${e.name} ${noteText}</div><div style="font-size:0.75rem; color:var(--text-muted);">${e.speed} SPD</div></div></div><div style="text-align:right;"><div style="font-weight:700; color:var(--hsr-gold); font-size:1.05rem;">${e.simAV.toFixed(1)}</div><div style="font-size:0.68rem; color:var(--text-muted); text-transform:uppercase;">AV</div></div>`;
+      }
+      output.appendChild(node);
+    });
+  }
+}
+
+const advisor = new AdvisorEngine();
+const sim = new SimEngine();
+
+advisor.init();
+sim.init();
+</script>
+</body>
+</html>
