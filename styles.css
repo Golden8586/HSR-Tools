@@ -13,10 +13,7 @@
   --gold-glow: rgba(212, 175, 55, 0.2);
 }
 
-* { 
-  box-sizing: border-box; 
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
-}
+* { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
 
 body {
   background: var(--bg-dark);
@@ -174,10 +171,9 @@ label { font-size: 0.72rem; color: var(--text-muted); display: block; margin-bot
 
 .pity-gallery {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
   gap: 1rem;
   margin-top: 1rem;
-  margin-bottom: 1.5rem;
 }
 
 .pity-card {
@@ -213,6 +209,7 @@ label { font-size: 0.72rem; color: var(--text-muted); display: block; margin-bot
 
 .pity-outcome.won { color: var(--success); }
 .pity-outcome.lost { color: var(--danger); }
+.pity-outcome.guaranteed { color: var(--hsr-blue); }
 
 .unit-card {
   background: rgba(255, 255, 255, 0.03);
