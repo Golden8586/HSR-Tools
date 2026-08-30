@@ -15,23 +15,17 @@
   </header>
 
   <div class="nav-tabs">
-    <button class="tab-btn active" onclick="switchTab('advisorTab', this)">Roster & Investment Tracker</button>
-    <button class="tab-btn" onclick="switchTab('pityTab', this)">Warp Tracker</button>
+    <button class="tab-btn active" onclick="switchTab('advisorTab', this)">Roster & Pull Advisor</button>
+    <button class="tab-btn" onclick="switchTab('pityTab', this)">Pull History</button>
     <button class="tab-btn" onclick="switchTab('simTab', this)">AV Simulator</button>
   </div>
 
-  <!-- Investment Tracker & Roster Tab -->
+  <!-- Advisor Tab -->
   <div id="advisorTab" class="tab-content active">
     <div class="app-grid">
       <div class="glass-panel">
         <div class="panel-title">Owned Roster Setup</div>
-        
-        <!-- Search with Auto-Complete Popup -->
-        <div class="search-container">
-          <input type="text" id="characterSearch" class="search-input" placeholder="Type character name..." oninput="advisor.onSearchInput(this.value)" onfocus="advisor.onSearchInput(this.value)" autocomplete="off">
-          <div id="searchSuggestions" class="search-suggestions hidden"></div>
-        </div>
-
+        <input type="text" id="characterSearch" class="search-input" placeholder="Search character name..." oninput="advisor.filterRoster()">
         <div id="rosterGrid" class="roster-grid" style="margin-top: 1rem;"></div>
         <div style="margin-top: 1.2rem;">
           <button class="hsr-btn" onclick="advisor.analyze()">Generate Strategic Recommendations</button>
@@ -42,24 +36,28 @@
         <div class="glass-panel">
           <div class="panel-title">Priority Pull Recommendations</div>
           <div id="pullRecommendations">
-            <div style="color: var(--text-muted); font-size: 0.85rem;">Select your owned 5★ units on the left to view recommended pull priorities.</div>
+            <div style="color: var(--text-muted); font-size: 0.85rem;">Select your owned 5★ units on the left and click generate to view recommended pull priorities.</div>
           </div>
         </div>
 
         <div class="glass-panel">
           <div class="panel-title">Vertical Investment Priorities (Eidolons & LCs)</div>
           <div id="verticalInvestments">
-            <div style="color: var(--text-muted); font-size: 0.85rem;">Vertical investment paths (E1/E2/S1) will be calculated based on accurate character kits.</div>
+            <div style="color: var(--text-muted); font-size: 0.85rem;">Vertical investment paths (E1/E2/S1) will be calculated based on your owned roster.</div>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Warp Tracker Tab -->
+  <!-- Pity Gallery Tab -->
   <div id="pityTab" class="tab-content">
     <div class="glass-panel">
-      <div class="panel-title">Warp History & Pity Gallery</div>
+      <div class="panel-title">Pull Tracker & Pity History</div>
+      <div class="field-group">
+        <label>Type Character Name to Filter / Narrow Target</label>
+        <input type="text" id="trackerInput" class="search-input" placeholder="Start typing character name (e.g., Acheron, Feixiao, Gepard)..." oninput="advisor.filterTracker()">
+      </div>
       <div class="pity-gallery" id="pityGalleryContainer"></div>
     </div>
   </div>
