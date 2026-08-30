@@ -1,8 +1,25 @@
+// REPLACE WITH THIS:
 function switchTab(tabId, btn) {
-  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById(tabId).classList.add('active');
-  btn.classList.add('active');
+  const contents = document.querySelectorAll('.tab-content');
+  contents.forEach(content => content.classList.remove('active'));
+
+  const buttons = document.querySelectorAll('.tab-btn');
+  buttons.forEach(b => b.classList.remove('active'));
+
+  const targetTab = document.getElementById(tabId);
+  if (targetTab) targetTab.classList.add('active');
+  if (btn) btn.classList.add('active');
+
+  // Triggers engine updates on tab switch
+  if (tabId === 'advisorTab' && window.advisor) {
+    window.advisor.renderRoster(document.getElementById('characterSearch')?.value || '');
+  } else if (tabId === 'pityTab' && window.advisor) {
+    window.advisor.renderPityGallery(document.getElementById('trackerInput')?.value || '');
+    window.advisor.calculateStats();
+  } else if (tabId === 'simTab' && window.sim) {
+    window.sim.renderUnits();
+    window.sim.runSimulation();
+  }
 }
 
 const MASTER_ROSTER = [
