@@ -2,174 +2,358 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>HSR Warp Tracker & Analytics</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Express Tactical Suite</title>
   <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #0f1117; color: #e2e8f0; margin: 20px; }
-    .container { max-width: 900px; margin: 0 auto; }
-    .card { background: #1a1d24; border: 1px solid #2d3748; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
-    h2, h3 { color: #48bb78; margin-top: 0; }
+    :root {
+      --bg-dark: #0b0e17;
+      --card-bg: rgba(20, 26, 43, 0.85);
+      --card-border: rgba(212, 175, 55, 0.25);
+      --hsr-gold: #d4af37;
+      --hsr-gold-light: #f3e5ab;
+      --hsr-purple: #a855f7;
+      --hsr-blue: #3b82f6;
+      --text-main: #e2e8f0;
+      --text-muted: #94a3b8;
+    }
+
+    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background: var(--bg-dark); color: var(--text-main); margin: 0; padding: 2rem 1rem; }
+    .container { max-width: 1100px; margin: 0 auto; }
+
+    header { text-align: center; margin-bottom: 2rem; }
+    h1 { color: var(--hsr-gold); margin: 0 0 0.5rem 0; font-size: 2.2rem; text-transform: uppercase; letter-spacing: 2px; }
     
-    /* Input Form Styles */
-    .form-group { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px; }
-    input, select, button { padding: 10px; background: #2d3748; border: 1px solid #4a5568; color: #fff; border-radius: 4px; }
-    button { background: #38a169; cursor: pointer; font-weight: bold; border: none; }
-    button:hover { background: #2f855a; }
+    /* Navigation Tabs */
+    .tab-nav { display: flex; justify-content: center; gap: 0.5rem; margin-bottom: 1.5rem; }
+    .tab-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: 0.6rem 1.2rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: all 0.2s;
+    }
+    .tab-btn.active, .tab-btn:hover { background: var(--hsr-gold); color: #000; border-color: var(--hsr-gold); }
 
-    /* Stats Grid */
-    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; }
-    .stat-box { background: #2d3748; padding: 15px; border-radius: 6px; text-align: center; }
-    .stat-val { font-size: 1.6em; font-weight: bold; color: #ecc94b; }
-    .stat-lbl { font-size: 0.85em; color: #a0aec0; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
 
-    /* Grid Display for 5-Star pulls */
-    .pull-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 12px; margin-top: 15px; }
-    .pull-card { background: #2d3748; border-radius: 6px; padding: 10px; text-align: center; border: 2px solid #ecc94b; position: relative; }
-    .pull-card.lost { border-color: #e53e3e; }
-    .avatar-img { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; background: #1a1d24; margin: 0 auto 8px; display: block; }
-    .pity-badge { background: #d69e2e; color: #1a202c; font-weight: bold; padding: 2px 6px; border-radius: 10px; font-size: 0.8em; }
-    .outcome-tag { font-size: 0.75em; margin-top: 4px; }
-    .won-text { color: #48bb78; }
-    .lost-text { color: #f56565; }
+    /* UI Panels */
+    .glass-panel {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      margin-bottom: 1.5rem;
+    }
+
+    .panel-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--hsr-gold);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 1.2rem;
+    }
+
+    .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+    .stat-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 6px;
+      padding: 1rem;
+      text-align: center;
+    }
+    .stat-card .val { font-size: 1.8rem; font-weight: 800; color: var(--hsr-gold); margin-top: 0.3rem; }
+    .stat-card .label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; }
+
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0.75rem; align-items: end; }
+    label { font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 0.25rem; text-transform: uppercase; }
+    input, select {
+      background: rgba(10, 14, 26, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #fff;
+      padding: 0.55rem;
+      border-radius: 4px;
+      width: 100%;
+    }
+
+    .hsr-btn {
+      background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(212, 175, 55, 0.05));
+      border: 1px solid var(--hsr-gold);
+      color: var(--hsr-gold-light);
+      padding: 0.6rem 1rem;
+      border-radius: 4px;
+      font-weight: 700;
+      cursor: pointer;
+      width: 100%;
+    }
+    .hsr-btn:hover { background: var(--hsr-gold); color: #000; }
+
+    /* History Gallery */
+    .history-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 1rem; }
+    .pull-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      padding: 0.8rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+    .pull-card.five-star { border-color: var(--hsr-gold); background: rgba(212, 175, 55, 0.05); }
+    .pull-card.four-star { border-color: var(--hsr-purple); }
+
+    .char-avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      border: 2px solid var(--hsr-gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.2rem;
+      background: #1a2238;
+      color: var(--hsr-gold);
+      margin-bottom: 0.5rem;
+    }
+    .pull-card.four-star .char-avatar { border-color: var(--hsr-purple); color: var(--hsr-purple); }
+
+    .pity-badge {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      background: rgba(0, 0, 0, 0.8);
+      border: 1px solid var(--hsr-gold);
+      color: var(--hsr-gold);
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.1rem 0.4rem;
+      border-radius: 4px;
+    }
+    .result-tag { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; margin-top: 0.2rem; }
+    .win { color: #4ade80; }
+    .guaranteed { color: var(--hsr-blue); }
+    .lost { color: #f87171; }
   </style>
 </head>
 <body>
 
 <div class="container">
-  <!-- Manual Input Card -->
-  <div class="card">
-    <h2>Add Warp Entry</h2>
-    <div class="form-group">
-      <input type="text" id="charName" placeholder="Character Name (e.g. Acheron)" required />
-      <input type="number" id="pityCount" placeholder="Pity Count (1-90)" min="1" max="90" required />
-      <select id="winStatus">
-        <option value="win">50/50 Won (Featured)</option>
-        <option value="loss">50/50 Lost (Standard)</option>
-        <option value="guaranteed">Guaranteed</option>
-      </select>
-      <input type="file" id="customImg" accept="image/png, image/jpeg" title="Optional custom PNG" />
-      <button onclick="addPull()">Add Warp Record</button>
+  <header>
+    <h1>Express Tactical Suite</h1>
+    <div class="tab-nav">
+      <button class="tab-btn active" onclick="switchTab('trackerTab', this)">Warp Tracker</button>
+      <button class="tab-btn" onclick="switchTab('advisorTab', this)">Investment Advisor</button>
+      <button class="tab-btn" onclick="switchTab('simTab', this)">AV Simulator</button>
+    </div>
+  </header>
+
+  <!-- TAB 1: WARP TRACKER -->
+  <div id="trackerTab" class="tab-content active">
+    <div class="glass-panel">
+      <div class="panel-title">Warp Analytics Overview</div>
+      <div class="grid-4">
+        <div class="stat-card">
+          <div class="label">Total 5★ Pulled</div>
+          <div class="val" id="statTotal5Star">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">50/50 Win Rate</div>
+          <div class="val" id="statWinRate">0%</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Avg 5★ Pity</div>
+          <div class="val" id="statAvgPity">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Soft Pity Rate (74+)</div>
+          <div class="val" id="statSoftPity">0%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="glass-panel">
+      <div class="panel-title">Add Manual Warp Record</div>
+      <div class="form-grid">
+        <div>
+          <label>Character Name</label>
+          <input type="text" id="inputName" placeholder="e.g. Acheron">
+        </div>
+        <div>
+          <label>Rarity</label>
+          <select id="inputRarity">
+            <option value="5">5★ Character</option>
+            <option value="4">4★ Character</option>
+          </select>
+        </div>
+        <div>
+          <label>Pity Count</label>
+          <input type="number" id="inputPity" min="1" max="90" value="75">
+        </div>
+        <div>
+          <label>50/50 Outcome</label>
+          <select id="inputOutcome">
+            <option value="win">Won 50/50</option>
+            <option value="guaranteed">Guaranteed</option>
+            <option value="loss">Lost 50/50 (Standard 5★)</option>
+          </select>
+        </div>
+        <div>
+          <button class="hsr-btn" onclick="tracker.addRecord()">+ Add Warp</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="glass-panel">
+      <div class="panel-title">Pull History & Pity Gallery</div>
+      <div id="historyGrid" class="history-grid"></div>
     </div>
   </div>
 
-  <!-- Analytics Dashboard -->
-  <div class="card">
-    <h2>Warp Analytics</h2>
-    <div class="stats-grid">
-      <div class="stat-box"><div class="stat-val" id="totalPulls">0</div><div class="stat-lbl">Total Warps Executed</div></div>
-      <div class="stat-box"><div class="stat-val" id="totalFiveStars">0</div><div class="stat-lbl">Total 5★ Pulled</div></div>
-      <div class="stat-box"><div class="stat-val" id="winRate">0%</div><div class="stat-lbl">50/50 Win Rate</div></div>
-      <div class="stat-box"><div class="stat-val" id="avgPity">0</div><div class="stat-lbl">Average 5★ Pity</div></div>
+  <!-- TAB 2: PULL & INVESTMENT ADVISOR -->
+  <div id="advisorTab" class="tab-content">
+    <div class="glass-panel">
+      <div class="panel-title">Pull & Investment Advisor</div>
+      <p style="color: var(--text-muted);">Calculates optimal resource allocation and banner pull probabilities.</p>
+      <div class="form-grid">
+        <div>
+          <label>Current Stellar Jades</label>
+          <input type="number" value="16000">
+        </div>
+        <div>
+          <label>Special Passes</label>
+          <input type="number" value="10">
+        </div>
+        <div>
+          <label>Target Character</label>
+          <input type="text" placeholder="e.g. Feixiao">
+        </div>
+        <div>
+          <button class="hsr-btn">Calculate Pull Chances</button>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- Graphic 5-Star Storage Display -->
-  <div class="card">
-    <h3>5-Star Collection History</h3>
-    <div id="pullDisplay" class="pull-grid"></div>
+  <!-- TAB 3: AV SIMULATOR -->
+  <div id="simTab" class="tab-content">
+    <div class="glass-panel">
+      <div class="panel-title">Action Value (AV) Simulator</div>
+      <p style="color: var(--text-muted);">Simulates team Speed thresholds, Action Advance, and turn-order mechanics.</p>
+      <div class="form-grid">
+        <div>
+          <label>Base Speed</label>
+          <input type="number" value="134">
+        </div>
+        <div>
+          <label>Action Advance %</label>
+          <input type="number" value="25">
+        </div>
+        <div>
+          <button class="hsr-btn">Simulate Action Order</button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
 <script>
-  // Persistent Storage Key
-  let warpData = JSON.parse(localStorage.getItem('hsr_warp_history')) || [];
+// Tab Switcher
+function switchTab(tabId, btn) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  btn.classList.add('active');
+}
 
-  // Default image links that bypass CORS restrictions
-  const defaultAvatars = {
-    "kafka": "https://upload.wikimedia.org/wikipedia/commons/3/3f/Placeholder_view_vector.svg",
-    "acheron": "https://upload.wikimedia.org/wikipedia/commons/3/3f/Placeholder_view_vector.svg"
-  };
-
-  function addPull() {
-    const nameInput = document.getElementById('charName').value.trim();
-    const pityInput = parseInt(document.getElementById('pityCount').value);
-    const winInput = document.getElementById('winStatus').value;
-    const fileInput = document.getElementById('customImg');
-
-    if (!nameInput || isNaN(pityInput)) {
-      alert("Please provide a character name and valid pity count.");
-      return;
-    }
-
-    const processEntry = (imgDataUrl) => {
-      const entry = {
-        id: Date.now(),
-        name: nameInput,
-        pity: pityInput,
-        outcome: winInput,
-        image: imgDataUrl || null
-      };
-      
-      warpData.push(entry);
-      localStorage.setItem('hsr_warp_history', JSON.stringify(warpData));
-      updateDashboard();
-      
-      // Reset inputs
-      document.getElementById('charName').value = '';
-      document.getElementById('pityCount').value = '';
-      document.getElementById('customImg').value = '';
-    };
-
-    // Handle local image file conversion to base64 for persistent storage
-    if (fileInput.files && fileInput.files[0]) {
-      const reader = new FileReader();
-      reader.onload = (e) => processEntry(e.target.result);
-      reader.readAsDataURL(fileInput.files[0]);
-    } else {
-      processEntry(null);
-    }
+// Warp Tracker Logic
+class WarpTracker {
+  constructor() {
+    this.records = JSON.parse(localStorage.getItem('hsr_warp_records')) || [
+      { name: "Acheron", rarity: 5, pity: 78, outcome: "win" },
+      { name: "Aventurine", rarity: 5, pity: 42, outcome: "win" },
+      { name: "Gepard", rarity: 5, pity: 81, outcome: "loss" },
+      { name: "Feixiao", rarity: 5, pity: 76, outcome: "guaranteed" }
+    ];
   }
 
-  function updateDashboard() {
-    const total5 = warpData.length;
-    let totalPulls = 0;
-    let wins = 0;
-    let total5050s = 0;
+  init() { this.render(); }
 
-    warpData.forEach(p => {
-      totalPulls += p.pity;
-      if (p.outcome === 'win') {
-        wins++;
-        total5050s++;
-      } else if (p.outcome === 'loss') {
-        total5050s++;
-      }
+  addRecord() {
+    const name = document.getElementById('inputName').value.trim();
+    const rarity = parseInt(document.getElementById('inputRarity').value);
+    const pity = parseInt(document.getElementById('inputPity').value) || 1;
+    const outcome = document.getElementById('inputOutcome').value;
+
+    if (!name) return;
+
+    this.records.unshift({ name, rarity, pity, outcome });
+    this.save();
+    this.render();
+    document.getElementById('inputName').value = '';
+  }
+
+  save() { localStorage.setItem('hsr_warp_records', JSON.stringify(this.records)); }
+
+  render() {
+    const grid = document.getElementById('historyGrid');
+    grid.innerHTML = '';
+
+    const fiveStars = this.records.filter(r => r.rarity === 5);
+    const total5Star = fiveStars.length;
+
+    let wins = 0;
+    let fiftyFiftyCount = 0;
+    let totalPity = 0;
+    let softPityCount = 0;
+
+    fiveStars.forEach(r => {
+      totalPity += r.pity;
+      if (r.pity >= 74) softPityCount++;
+      if (r.outcome === 'win') { wins++; fiftyFiftyCount++; } 
+      else if (r.outcome === 'loss') { fiftyFiftyCount++; }
     });
 
-    const avgPity = total5 > 0 ? (totalPulls / total5).toFixed(1) : 0;
-    const winRate = total5050s > 0 ? ((wins / total5050s) * 100).toFixed(1) + '%' : 'N/A';
+    const winRate = fiftyFiftyCount > 0 ? Math.round((wins / fiftyFiftyCount) * 100) : 0;
+    const avgPity = total5Star > 0 ? (totalPity / total5Star).toFixed(1) : 0;
+    const softPityRate = total5Star > 0 ? Math.round((softPityCount / total5Star) * 100) : 0;
 
-    // Update DOM Analytics
-    document.getElementById('totalPulls').innerText = totalPulls;
-    document.getElementById('totalFiveStars').innerText = total5;
-    document.getElementById('avgPity').innerText = avgPity;
-    document.getElementById('winRate').innerText = winRate;
+    document.getElementById('statTotal5Star').innerText = total5Star;
+    document.getElementById('statWinRate').innerText = `${winRate}%`;
+    document.getElementById('statAvgPity').innerText = avgPity;
+    document.getElementById('statSoftPity').innerText = `${softPityRate}%`;
 
-    // Render Image Cards
-    const display = document.getElementById('pullDisplay');
-    display.innerHTML = '';
-
-    warpData.slice().reverse().forEach(p => {
+    this.records.forEach(r => {
       const card = document.createElement('div');
-      card.className = `pull-card ${p.outcome === 'loss' ? 'lost' : ''}`;
-      
-      // Fallback for image loading: standard placeholder with character initial if image fails
-      const fallbackSrc = `https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=2d3748&color=ecc94b`;
-      const imgSrc = p.image || defaultAvatars[p.name.toLowerCase()] || fallbackSrc;
+      card.className = `pull-card ${r.rarity === 5 ? 'five-star' : 'four-star'}`;
+
+      const initials = r.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+
+      let outcomeClass = 'win';
+      let outcomeText = 'Won 50/50';
+      if (r.outcome === 'guaranteed') { outcomeClass = 'guaranteed'; outcomeText = 'Guaranteed'; }
+      if (r.outcome === 'loss') { outcomeClass = 'lost'; outcomeText = 'Lost 50/50'; }
 
       card.innerHTML = `
-        <img src="${imgSrc}" class="avatar-img" onerror="this.src='${fallbackSrc}'" alt="${p.name}">
-        <div style="font-weight: bold; font-size: 0.9em; margin-bottom: 4px;">${p.name}</div>
-        <span class="pity-badge">${p.pity} Pity</span>
-        <div class="outcome-tag ${p.outcome === 'loss' ? 'lost-text' : 'won-text'}">
-          ${p.outcome.toUpperCase()}
-        </div>
+        <div class="pity-badge">${r.pity} Pity</div>
+        <div class="char-avatar">${initials}</div>
+        <div style="font-size: 0.85rem; font-weight: 700; text-align: center;">${r.name}</div>
+        <div class="result-tag ${outcomeClass}">${outcomeText}</div>
       `;
-      display.appendChild(card);
+      grid.appendChild(card);
     });
   }
+}
 
-  // Initial load execution
-  updateDashboard();
+const tracker = new WarpTracker();
+tracker.init();
 </script>
 </body>
 </html>
