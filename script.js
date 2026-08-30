@@ -7,18 +7,13 @@ function switchTab(tabId, btn) {
 
 const MASTER_ROSTER = [
   { name: "Acheron", img: "https://raw.githubusercontent.com/Mar-7th/StarRailRes/master/icon/character/1308.png", role: "DPS", archetype: "Nihility", sigLC: "Along the Passing Shore", sigDesc: "Essential for stack generation per turn + CRIT DMG.", e1: "18% CRIT Rate against debuffed targets.", e2: "Requires only 1 Nihility teammate; unlocks Harmony supports." },
-  { name: "Aglaea", img: "https://raw.githubusercontent.com/Mar-7th/StarRailRes/master/icon/character/1402.png", role: "DPS", archetype: "Remembrance", sigLC: "Garment of Pure Reflection", sigDesc: "Massive SPD + Servant DMG multiplier.", e1: "Increases Servant Action Advance frequency.", e2: "Ignores 20% DEF during joint attacks." },
-  { name: "Anaxa", img: "https://raw.githubusercontent.com/Mar-7th/StarRailRes/master/icon/character/1406.png", role: "DPS", archetype: "Erudition", sigLC: "Crown of the Starlit Path", sigDesc: "AoE DEF Shred + Ultimate Energy Regeneration.", e1: "Triggers follow-up attack when enemies drop below 50% HP.", e2: "Ultimate ignores 20% All-Type RES." },
-  { name: "Archer", img: "https://raw.githubusercontent.com/Mar-7th/StarRailRes/master/icon/character/1408.png", role: "DPS", archetype: "Hunt", sigLC: "Bow of the Infinite Sight", sigDesc: "Single-target CRIT Rate + DEF ignore on Skill.", e1: "Refunds 1 Skill Point on enemy defeat.", e2: "Gains extra Turn upon triggering Weakness Break." },
   { name: "Argenti", img: "https://raw.githubusercontent.com/Mar-7th/StarRailRes/master/icon/character/1302.png", role: "DPS", archetype: "Erudition", sigLC: "An Instant Before A Gaze", sigDesc: "High Ultimate DMG multiplier based on Max Energy.", e1: "Grants 40% CRIT DMG stacking from Talent.", e2: "ATK% boost when 3+ enemies are present." },
-  { name: "Ashveil", img: "https://raw.githubusercontent.com/Mar-7th/StarRailRes/master/icon/character/1410.png", role: "Support", archetype: "Universal", sigLC: "Shrouded Ember", sigDesc: "Teamwide Vulnerability debuff + Energy regen.", e1: "Extends debuff duration by 1 turn.", e2: "Grants 20% All-Type RES PEN to team." },
   { name: "Aventurine", img: "https://raw.githubusercontent.com/Mar-7th/StarRailRes/master/icon/character/1304.png", role: "Sustain", archetype: "FUA", sigLC: "Inherently Unjust Destiny", sigDesc: "DEF boost + vulnerability debuff on enemy follow-up.", e1: "Ultimate applies Shield; team CRIT DMG +20%.", e2: "Basic ATK applies 12% All-Type RES PEN debuff." },
   { name: "Bailu", img: "https://raw.githubusercontent.com/Mar-7th/StarRailRes/master/icon/character/1205.png", role: "Sustain", archetype: "Universal", sigLC: "Time Waits for No One", sigDesc: "Max HP% boost + bonus DMG on heal.", e1: "Energy regen when ally with Invigoration is max HP.", e2: "Healing output increased by 15% after Ultimate." },
   { name: "Black Swan", img: "https://raw.githubusercontent.com/Mar-7th/StarRailRes/master/icon/character/1307.png", role: "DPS", archetype: "DoT", sigLC: "Reforged Remembrance", sigDesc: "EHR boost + massive DEF ignore on DoT triggers.", e1: "Reduces enemy RES by 25% for active DoT types.", e2: "Spreads Arcana stacks when an enemy is defeated." },
-  { name: "Blade", img: "https://raw.githubusercontent.com/Mar-7th/StarRailRes/master/icon/character/1205.png", role: "DPS", archetype: "Hypercarry", sigLC: "The Unreachable Side", sigDesc: "Max HP% boost + incoming damage enhancement.", e1: "Ultimate single-target execute DMG scaling.", e2: "Increases CRIT Rate by 15% while Hellscape is active." },
+  { name: "Blade", img: "https://raw.githubusercontent.com/Mar-7th/StarRailRes/master/icon/character/1201.png", role: "DPS", archetype: "Hypercarry", sigLC: "The Unreachable Side", sigDesc: "Max HP% boost + incoming damage enhancement.", e1: "Ultimate single-target execute DMG scaling.", e2: "Increases CRIT Rate by 15% while Hellscape is active." },
   { name: "Boothill", img: "https://raw.githubusercontent.com/Mar-7th/StarRailRes/master/icon/character/1315.png", role: "DPS", archetype: "Break", sigLC: "Sailing Towards a Second Life", sigDesc: "Break Effect + DEF ignore on Break DMG + Speed.", e1: "Starts battle with 1 Pocket Trickshot; ignores 16% DEF.", e2: "Regenerates 1 SP when triggering Pocket Trickshot." },
   { name: "Bronya", img: "https://raw.githubusercontent.com/Mar-7th/StarRailRes/master/icon/character/1101.png", role: "Support", archetype: "Hypercarry", sigLC: "But the Battle Isn't Over", sigDesc: "Energy Regen + SP refund on Ult + Next Ally DMG%.", e1: "50% chance to recover 1 SP when using Skill.", e2: "Advanced target gains +30% SPD for 1 turn." },
-  { name: "Castorice", img: "https://raw.githubusercontent.com/Mar-7th/StarRailRes/master/icon/character/1401.png", role: "DPS", archetype: "Quantum", sigLC: "Phantasmagoria", sigDesc: "Quantum RES PEN + HP-drain damage scaling.", e1: "Increases Skill CRIT Rate based on lost HP.", e2: "Immediate extra turn on Ultimate cast." },
   { name: "Clara", img: "https://raw.githubusercontent.com/Mar-7th/StarRailRes/master/icon/character/1107.png", role: "DPS", archetype: "Counter", sigLC: "Something Irreplaceable", sigDesc: "ATK% boost + HP recovery on hit taken.", e1: "Mark of Svarog is no longer removed on Skill.", e2: "Increases ATK by 30% for 2 turns after Ultimate." },
   { name: "Dan Heng • Imbibitor Lunae", img: "https://raw.githubusercontent.com/Mar-7th/StarRailRes/master/icon/character/1213.png", role: "DPS", archetype: "Hypercarry", sigLC: "Brighter Than the Sun", sigDesc: "CRIT Rate + Energy Regen on 3-EBA.", e1: "Increases Righteous Heart stacks max limit.", e2: "100% Action Advance after Ultimate + 1 Squama Sacra." },
   { name: "Dr. Ratio", img: "https://raw.githubusercontent.com/Mar-7th/StarRailRes/master/icon/character/1305.png", role: "DPS", archetype: "FUA", sigLC: "Baptism of Pure Thought", sigDesc: "CRIT DMG boost + ignores DEF per debuff on target.", e1: "Increases Summation stack limit by 4.", e2: "Follow-up deals extra trace damage per debuff." },
@@ -43,12 +38,11 @@ const MASTER_ROSTER = [
   { name: "Silver Wolf", img: "https://raw.githubusercontent.com/Mar-7th/StarRailRes/master/icon/character/1006.png", role: "Support", archetype: "Nihility", sigLC: "Incessant Rain", sigDesc: "Effect Hit Rate + CRIT Rate + Aether Code debuff.", e1: "Regenerates Energy per debuff on enemy when using Ult.", e2: "Enemies entering battle have Effect RES reduced by 20%." },
   { name: "Sparkle", img: "https://raw.githubusercontent.com/Mar-7th/StarRailRes/master/icon/character/1306.png", role: "Support", archetype: "Hypercarry", sigLC: "Earthly Escapade", sigDesc: "CRIT DMG boost + team CRIT Rate/DMG aura.", e1: "Cipher state grants +40% ATK and extends duration.", e2: "Cipher stacks ignore 8% enemy DEF per stack (max 24%)." },
   { name: "Sunday", img: "https://raw.githubusercontent.com/Mar-7th/StarRailRes/master/icon/character/1313.png", role: "Support", archetype: "Hypercarry", sigLC: "A Grounded Ascent", sigDesc: "Energy Regen + Target CRIT DMG scaling.", e1: "Skill target ignores 16% DEF on attacks.", e2: "Ultimate regenerates SP and boosts team Speed." },
-  { name: "The Herta", img: "https://raw.githubusercontent.com/Mar-7th/StarRailRes/master/icon/character/1404.png", role: "DPS", archetype: "Erudition", sigLC: "Geniuses' Grand Creation", sigDesc: "AoE CRIT DMG + Erudition skill stacking.", e1: "Talent triggers at higher enemy HP thresholds.", e2: "Increases Speed and Energy Gain per AoE trigger." },
   { name: "Topaz & Numby", img: "https://raw.githubusercontent.com/Mar-7th/StarRailRes/master/icon/character/1112.png", role: "DPS", archetype: "FUA", sigLC: "Worblesd-d-d!", sigDesc: "CRIT Rate + FUA CRIT DMG vulnerability.", e1: "Debuff stacks up to 50% CRIT DMG for FUA attacks.", e2: "Numby attacks restore 5 Energy to Topaz." },
   { name: "Yunli", img: "https://raw.githubusercontent.com/Mar-7th/StarRailRes/master/icon/character/1221.png", role: "DPS", archetype: "Counter", sigLC: "Dance at Sunset", sigDesc: "Massive Agro increase + Counter CRIT DMG.", e1: "Intuit: Slash / Cull damage increased significantly.", e2: "Counter attacks ignore 20% of enemy DEF." }
 ];
 
-const PITY_HISTORY = [
+let PITY_HISTORY = [
   { name: "Feixiao", pity: 76, outcome: "WON 50/50" },
   { name: "Acheron", pity: 78, outcome: "WON 50/50" },
   { name: "Gepard", pity: 81, outcome: "LOST 50/50" },
@@ -68,6 +62,7 @@ class AdvisorEngine {
   init() {
     this.renderRoster();
     this.renderPityGallery();
+    this.calculateStats();
   }
 
   renderRoster(filter = "") {
@@ -104,6 +99,44 @@ class AdvisorEngine {
     });
   }
 
+  calculateStats() {
+    if (PITY_HISTORY.length === 0) return;
+
+    const totalPity = PITY_HISTORY.reduce((acc, cur) => acc + cur.pity, 0);
+    const avgPity = (totalPity / PITY_HISTORY.length).toFixed(1);
+
+    const nonGuaranteed = PITY_HISTORY.filter(p => p.outcome !== "GUARANTEED");
+    const wins = nonGuaranteed.filter(p => p.outcome.startsWith("WON")).length;
+    const winRate = nonGuaranteed.length > 0 ? ((wins / nonGuaranteed.length) * 100).toFixed(0) : 0;
+
+    const softPityCount = PITY_HISTORY.filter(p => p.pity >= 75).length;
+    const softPityRate = ((softPityCount / PITY_HISTORY.length) * 100).toFixed(0);
+
+    const estRate = ((PITY_HISTORY.length / totalPity) * 100).toFixed(2);
+
+    document.getElementById('statAvgPity').innerText = avgPity;
+    document.getElementById('statWinRate').innerText = `${winRate}%`;
+    document.getElementById('statSoftPity').innerText = `${softPityRate}%`;
+    document.getElementById('statFiveStarRate').innerText = `${estRate}%`;
+  }
+
+  addPullRecord() {
+    const nameInput = document.getElementById('pullCharName');
+    const pityInput = document.getElementById('pullPityCount');
+    const outcomeInput = document.getElementById('pullOutcome');
+
+    const name = nameInput.value.trim();
+    const pity = parseInt(pityInput.value);
+    const outcome = outcomeInput.value;
+
+    if (!name || isNaN(pity)) return;
+
+    PITY_HISTORY.unshift({ name, pity, outcome });
+    this.renderPityGallery();
+    this.calculateStats();
+    nameInput.value = '';
+  }
+
   renderPityGallery(filter = "") {
     const container = document.getElementById('pityGalleryContainer');
     container.innerHTML = '';
@@ -112,14 +145,11 @@ class AdvisorEngine {
     let displayList = PITY_HISTORY;
 
     if (query !== "") {
-      displayList = MASTER_ROSTER.filter(u => u.name.toLowerCase().includes(query)).map(u => {
-        const existing = PITY_HISTORY.find(p => p.name.toLowerCase() === u.name.toLowerCase());
-        return existing || { name: u.name, pity: "--", outcome: "TARGET UNIT" };
-      });
+      displayList = PITY_HISTORY.filter(u => u.name.toLowerCase().includes(query));
     }
 
     if (displayList.length === 0) {
-      container.innerHTML = `<div style="color:var(--text-muted); font-size:0.85rem; grid-column: 1 / -1;">No matching character found.</div>`;
+      container.innerHTML = `<div style="color:var(--text-muted); font-size:0.85rem; grid-column: 1 / -1;">No matching history logs found.</div>`;
       return;
     }
 
@@ -129,13 +159,13 @@ class AdvisorEngine {
 
       const card = document.createElement('div');
       card.className = 'pity-card';
-      const isWon = item.outcome.startsWith("WON") || item.outcome === "TARGET UNIT";
+      const outcomeClass = item.outcome.startsWith("WON") ? 'won' : item.outcome.startsWith("LOST") ? 'lost' : 'guaranteed';
       
       card.innerHTML = `
         <div class="pity-badge">${item.pity} Pity</div>
         <img class="char-avatar-img" style="margin-top:0.4rem;" src="${imgUrl}" alt="${item.name}" onerror="this.src='https://raw.githubusercontent.com/Mar-7th/StarRailRes/master/icon/character/1001.png'">
         <div class="char-name" style="margin-bottom:0;">${item.name}</div>
-        <div class="pity-outcome ${isWon ? 'won' : 'lost'}">${item.outcome}</div>
+        <div class="pity-outcome ${outcomeClass}">${item.outcome}</div>
       `;
       container.appendChild(card);
     });
